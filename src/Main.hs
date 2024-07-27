@@ -14,5 +14,6 @@ type Azulejos = [(Int,String)]
 --a soma das peças seja menor que 20, o saco volta a ter as 100 peças iniciais
 sacoAzulejos :: Azulejos -> Azulejos
 sacoAzulejos [] = [(20,"Azul"),(20,"Amarelo"),(20,"Vermelho"),(20,"Preto"),(20,"Branco")]
-sacoAzulejos xs | sum (map fst xs) <= 20 = [(20,"Azul"),(20,"Amarelo"),(20,"Vermelho"),(20,"Preto"),(20,"Branco")]
+sacoAzulejos xs | totalAzulejos <= 20 = [(20,"Azul"),(20,"Amarelo"),(20,"Vermelho"),(20,"Preto"),(20,"Branco")]
                 | otherwise = xs
+                  where totalAzulejos = sum (map fst xs)
