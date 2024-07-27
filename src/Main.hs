@@ -24,11 +24,7 @@ azulejosParaNum :: [Azulejos] -> Int -> [Azulejo]
 azulejosParaNum [] _ = []
 azulejosParaNum ((0, _):xs) acc = azulejosParaNum xs acc
 azulejosParaNum (x:xs) acc = (acc,snd x): azulejosParaNum ((fst x - 1, snd x):xs) (acc+1)
---azulejosParaNum (v:w:x:y:z:xss) acc | fst v /= 0 = (acc,"Azul"): azulejosParaNum ((fst v - 1, snd v):w:x:y:z:xss) (acc+1)
---                                   | fst w >= 0 = (acc,"Amarelo"): azulejosParaNum ((fst w - 1, snd w):x:y:z:xss) (acc+1)
---                                    | fst x >= 0 = (acc,"Vermelho"): azulejosParaNum ((fst x - 1, snd x):y:z:xss) (acc+1)
---                                    | fst y >= 0 = (acc,"Preto"): azulejosParaNum ((fst y - 1, snd y):z:xss) (acc+1)
---                                   | fst z >= 0 = (acc,"Branco"): azulejosParaNum ((fst z - 1, snd z):xss) (acc+1)
+
 
 
 --expositores :: [Azulejos] -> Expositores
