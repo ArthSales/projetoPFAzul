@@ -21,10 +21,10 @@ sacoAzulejos xs | totalAzulejos <= 20 = [(20,"Azul"),(20,"Amarelo"),(20,"Vermelh
                 | otherwise = xs
                   where totalAzulejos = sum (map fst xs)
 
-atualizaAzulejo :: Cor -> Azulejos -> Azulejos
-atualizaAzulejo _ [] = [(20,"Azul"),(20,"Amarelo"),(20,"Vermelho"),(20,"Preto"),(20,"Branco")]
-atualizaAzulejo cor ((q,c):azulejos) | cor == c = (q+1, c): azulejos
-                                     | otherwise = (q,c) : atualizaAzulejo cor azulejos
+somaAzulejo :: Cor -> Azulejos -> Azulejos
+somaAzulejo _ [] = [(20,"Azul"),(20,"Amarelo"),(20,"Vermelho"),(20,"Preto"),(20,"Branco")]
+somaAzulejo cor ((q,c):azulejos) | cor == c = (q+1, c): azulejos
+                                     | otherwise = (q,c) : somaAzulejo cor azulejos
 
 azulejosParaNum :: Azulejos -> Int -> [AzulejosSeparados]
 azulejosParaNum [] _ = []
@@ -33,7 +33,7 @@ azulejosParaNum (x:xs) acc = (acc,snd x): azulejosParaNum ((fst x - 1, snd x):xs
 
 numParaAzulejos :: [AzulejosSeparados] -> Azulejos -> Azulejos
 numParaAzulejos [] azulejos = azulejos
-numParaAzulejos ((_,c):azulejosSeparados) azulejos = numParaAzulejos azulejosSeparados (atualizaAzulejo c azulejos)
+numParaAzulejos ((_,c):azulejosSeparados) azulejos = numParaAzulejos azulejosSeparados (somaAzulejo c azulejos)
 
 -- 
 --expositores :: [Azulejos] -> Expositores
