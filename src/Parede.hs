@@ -11,11 +11,11 @@ proximaLinha :: Int -> [(a, Bool)] -> [(a, Bool)]
 proximaLinha n xs = drop k xs ++ take k xs
     where k = length xs - (n `mod` length xs)
     
-criarParede:: [[(Cor, Bool)]] 
+criarParede :: [[(Cor, Bool)]] 
 criarParede = [proximaLinha n linhaInicial | n <- [0..4]]
 
 -- PATTERN LINES
-criarPatternLines:: Int -> [[Maybe Cor]]
+criarPatternLines :: Int -> [[Maybe Cor]]
 criarPatternLines n = map criarSubPattern [1..n]
     where
         criarSubPattern :: Int -> [Maybe Cor]
@@ -30,7 +30,7 @@ todosIguais [] = True
 todosIguais (x:xs) = all (== x) xs
 
 
-atualizarLinha:: [Maybe Cor] -> [(Cor, Bool)] -> [(Cor, Bool)]
+atualizarLinha :: [Maybe Cor] -> [(Cor, Bool)] -> [(Cor, Bool)]
 atualizarLinha pat linha
   | todosIguais pat && not (null pat) = map atualizarElemento linha
   | otherwise = linha
