@@ -20,6 +20,16 @@
   (major1) == 4 && (major2) <  18 || \
   (major1) == 4 && (major2) == 18 && (minor) <= 2)
 #endif /* MIN_VERSION_base */
+/* package gloss-1.13.1.1 */
+#ifndef VERSION_gloss
+#define VERSION_gloss "1.13.1.1"
+#endif /* VERSION_gloss */
+#ifndef MIN_VERSION_gloss
+#define MIN_VERSION_gloss(major1,major2,minor) (\
+  (major1) <  1 || \
+  (major1) == 1 && (major2) <  13 || \
+  (major1) == 1 && (major2) == 13 && (minor) <= 1)
+#endif /* MIN_VERSION_gloss */
 
 /* tool gcc-13 */
 #ifndef TOOL_VERSION_gcc
@@ -113,7 +123,7 @@
 #endif /* MIN_TOOL_VERSION_strip */
 
 #ifndef CURRENT_COMPONENT_ID
-#define CURRENT_COMPONENT_ID "projetoPFAzul-0.1.0.0-IbPljHuVDFwHn77xMn9EaA-projetoPFAzul"
+#define CURRENT_COMPONENT_ID "projetoPFAzul-0.1.0.0-JQOqR6IbJ3V6BZBRHA8NCj-projetoPFAzul"
 #endif /* CURRENT_COMPONENT_ID */
 #ifndef CURRENT_PACKAGE_VERSION
 #define CURRENT_PACKAGE_VERSION "0.1.0.0"

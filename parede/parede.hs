@@ -1,3 +1,5 @@
+module Parede where
+
 import Data.Maybe (fromMaybe)
 -- Definindo as cores
 data Cor = Amarelo | Azul | Branco | Vermelho | Preto deriving (Show, Enum, Bounded, Eq)
@@ -34,7 +36,7 @@ atualizarLinha pat linha
   | todosIguais pat && not (null pat) = map atualizarElemento linha
   | otherwise = linha
   where
-    elementoComum = fromMaybe (head [c | Just c <- pat]) (head pat)
+    elementoComum = fromMaybe (head (Data.Maybe.catMaybes pat)) (head pat)
     
     atualizarElemento :: (Cor, Bool) -> (Cor, Bool)
     atualizarElemento (cor, b)

@@ -1,12 +1,14 @@
-
 module Main (main, Azulejos) where
-import Parede
+
+import Graphics.Gloss (display, Display (..), white, Picture (..))
+
 main :: IO ()
+
 main = do
-  putStrLn "Entre com a lista de azulejos::"
-  print (sacoAzulejos [(4,"Azul"),(10,"Amarelo"),(10,"Vermelho"),(6,"Preto"),(10,"Branco")])
-  print (sacoAzulejos [(0,"Azul"),(2,"Amarelo"),(3,"Vermelho"),(10,"Preto"),(5,"Branco")])
-  print (azulejosParaNum (sacoAzulejos [(0,"Azul"),(2,"Amarelo"),(3,"Vermelho"),(10,"Preto"),(5,"Branco")]) 0 )
+   putStrLn "Entre com a lista de azulejos::"
+   print (sacoAzulejos [(4,"Azul"),(10,"Amarelo"),(10,"Vermelho"),(6,"Preto"),(10,"Branco")])
+   print (sacoAzulejos [(0,"Azul"),(2,"Amarelo"),(3,"Vermelho"),(10,"Preto"),(5,"Branco")])
+   print (azulejosParaNum (sacoAzulejos [(0,"Azul"),(2,"Amarelo"),(3,"Vermelho"),(10,"Preto"),(5,"Branco")]) 0 )
 
 --Renomeia a lista de tuplas [(Int,String)] para definir a lista de azulejos
 type Azulejos = [(Int,String)]
