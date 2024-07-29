@@ -46,12 +46,12 @@ getBinDir, getLibDir, getDynLibDir, getDataDir, getLibexecDir, getSysconfDir :: 
 
 
 bindir, libdir, dynlibdir, datadir, libexecdir, sysconfdir :: FilePath
-bindir     = "/home/arthur/projetoPFAzul/.stack-work/install/x86_64-linux/aafeca76a82d76fe5bf18ec20321bfa8d64bea26603c6b8d86467c8165cb4fa9/9.6.6/bin"
-libdir     = "/home/arthur/projetoPFAzul/.stack-work/install/x86_64-linux/aafeca76a82d76fe5bf18ec20321bfa8d64bea26603c6b8d86467c8165cb4fa9/9.6.6/lib/x86_64-linux-ghc-9.6.6/projetoPFAzul-0.1.0.0-IbPljHuVDFwHn77xMn9EaA-projetoPFAzul"
-dynlibdir  = "/home/arthur/projetoPFAzul/.stack-work/install/x86_64-linux/aafeca76a82d76fe5bf18ec20321bfa8d64bea26603c6b8d86467c8165cb4fa9/9.6.6/lib/x86_64-linux-ghc-9.6.6"
-datadir    = "/home/arthur/projetoPFAzul/.stack-work/install/x86_64-linux/aafeca76a82d76fe5bf18ec20321bfa8d64bea26603c6b8d86467c8165cb4fa9/9.6.6/share/x86_64-linux-ghc-9.6.6/projetoPFAzul-0.1.0.0"
-libexecdir = "/home/arthur/projetoPFAzul/.stack-work/install/x86_64-linux/aafeca76a82d76fe5bf18ec20321bfa8d64bea26603c6b8d86467c8165cb4fa9/9.6.6/libexec/x86_64-linux-ghc-9.6.6/projetoPFAzul-0.1.0.0"
-sysconfdir = "/home/arthur/projetoPFAzul/.stack-work/install/x86_64-linux/aafeca76a82d76fe5bf18ec20321bfa8d64bea26603c6b8d86467c8165cb4fa9/9.6.6/etc"
+bindir     = "/home/livia/projetoPFAzul/.stack-work/install/x86_64-linux/9e85d14173884a4722b8cb9b14f2baa2eda87ef96b6b793f9d70cc291d075ea9/9.6.6/bin"
+libdir     = "/home/livia/projetoPFAzul/.stack-work/install/x86_64-linux/9e85d14173884a4722b8cb9b14f2baa2eda87ef96b6b793f9d70cc291d075ea9/9.6.6/lib/x86_64-linux-ghc-9.6.6/projetoPFAzul-0.1.0.0-IbPljHuVDFwHn77xMn9EaA-projetoPFAzul"
+dynlibdir  = "/home/livia/projetoPFAzul/.stack-work/install/x86_64-linux/9e85d14173884a4722b8cb9b14f2baa2eda87ef96b6b793f9d70cc291d075ea9/9.6.6/lib/x86_64-linux-ghc-9.6.6"
+datadir    = "/home/livia/projetoPFAzul/.stack-work/install/x86_64-linux/9e85d14173884a4722b8cb9b14f2baa2eda87ef96b6b793f9d70cc291d075ea9/9.6.6/share/x86_64-linux-ghc-9.6.6/projetoPFAzul-0.1.0.0"
+libexecdir = "/home/livia/projetoPFAzul/.stack-work/install/x86_64-linux/9e85d14173884a4722b8cb9b14f2baa2eda87ef96b6b793f9d70cc291d075ea9/9.6.6/libexec/x86_64-linux-ghc-9.6.6/projetoPFAzul-0.1.0.0"
+sysconfdir = "/home/livia/projetoPFAzul/.stack-work/install/x86_64-linux/9e85d14173884a4722b8cb9b14f2baa2eda87ef96b6b793f9d70cc291d075ea9/9.6.6/etc"
 
 getBinDir     = catchIO (getEnv "projetoPFAzul_bindir")     (\_ -> return bindir)
 getLibDir     = catchIO (getEnv "projetoPFAzul_libdir")     (\_ -> return libdir)
