@@ -1,3 +1,5 @@
+module Main (main) where
+
 import Data.Maybe (fromMaybe)
 -- Definindo as cores
 data Cor = Amarelo | Azul | Branco | Vermelho | Preto deriving (Show, Enum, Bounded, Eq)
