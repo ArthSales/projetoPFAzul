@@ -46,12 +46,12 @@ getBinDir, getLibDir, getDynLibDir, getDataDir, getLibexecDir, getSysconfDir :: 
 
 
 bindir, libdir, dynlibdir, datadir, libexecdir, sysconfdir :: FilePath
-bindir     = "/home/arthur/projetoPFAzul/.stack-work/install/x86_64-linux/aafeca76a82d76fe5bf18ec20321bfa8d64bea26603c6b8d86467c8165cb4fa9/9.6.6/bin"
-libdir     = "/home/arthur/projetoPFAzul/.stack-work/install/x86_64-linux/aafeca76a82d76fe5bf18ec20321bfa8d64bea26603c6b8d86467c8165cb4fa9/9.6.6/lib/x86_64-linux-ghc-9.6.6/projetoPFAzul-0.1.0.0-IbPljHuVDFwHn77xMn9EaA-projetoPFAzul"
-dynlibdir  = "/home/arthur/projetoPFAzul/.stack-work/install/x86_64-linux/aafeca76a82d76fe5bf18ec20321bfa8d64bea26603c6b8d86467c8165cb4fa9/9.6.6/lib/x86_64-linux-ghc-9.6.6"
-datadir    = "/home/arthur/projetoPFAzul/.stack-work/install/x86_64-linux/aafeca76a82d76fe5bf18ec20321bfa8d64bea26603c6b8d86467c8165cb4fa9/9.6.6/share/x86_64-linux-ghc-9.6.6/projetoPFAzul-0.1.0.0"
-libexecdir = "/home/arthur/projetoPFAzul/.stack-work/install/x86_64-linux/aafeca76a82d76fe5bf18ec20321bfa8d64bea26603c6b8d86467c8165cb4fa9/9.6.6/libexec/x86_64-linux-ghc-9.6.6/projetoPFAzul-0.1.0.0"
-sysconfdir = "/home/arthur/projetoPFAzul/.stack-work/install/x86_64-linux/aafeca76a82d76fe5bf18ec20321bfa8d64bea26603c6b8d86467c8165cb4fa9/9.6.6/etc"
+bindir     = "/home/arthur/projetoPFAzul/.stack-work/install/x86_64-linux/5de331d7c271bf8ea3846330fab80fc0b143a53278091c70606bdb7bfaf7753b/9.6.6/bin"
+libdir     = "/home/arthur/projetoPFAzul/.stack-work/install/x86_64-linux/5de331d7c271bf8ea3846330fab80fc0b143a53278091c70606bdb7bfaf7753b/9.6.6/lib/x86_64-linux-ghc-9.6.6/projetoPFAzul-0.1.0.0-JQOqR6IbJ3V6BZBRHA8NCj-projetoPFAzul"
+dynlibdir  = "/home/arthur/projetoPFAzul/.stack-work/install/x86_64-linux/5de331d7c271bf8ea3846330fab80fc0b143a53278091c70606bdb7bfaf7753b/9.6.6/lib/x86_64-linux-ghc-9.6.6"
+datadir    = "/home/arthur/projetoPFAzul/.stack-work/install/x86_64-linux/5de331d7c271bf8ea3846330fab80fc0b143a53278091c70606bdb7bfaf7753b/9.6.6/share/x86_64-linux-ghc-9.6.6/projetoPFAzul-0.1.0.0"
+libexecdir = "/home/arthur/projetoPFAzul/.stack-work/install/x86_64-linux/5de331d7c271bf8ea3846330fab80fc0b143a53278091c70606bdb7bfaf7753b/9.6.6/libexec/x86_64-linux-ghc-9.6.6/projetoPFAzul-0.1.0.0"
+sysconfdir = "/home/arthur/projetoPFAzul/.stack-work/install/x86_64-linux/5de331d7c271bf8ea3846330fab80fc0b143a53278091c70606bdb7bfaf7753b/9.6.6/etc"
 
 getBinDir     = catchIO (getEnv "projetoPFAzul_bindir")     (\_ -> return bindir)
 getLibDir     = catchIO (getEnv "projetoPFAzul_libdir")     (\_ -> return libdir)
