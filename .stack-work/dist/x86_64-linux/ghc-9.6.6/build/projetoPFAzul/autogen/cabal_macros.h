@@ -30,6 +30,7 @@
   (major1) == 1 && (major2) <  13 || \
   (major1) == 1 && (major2) == 13 && (minor) <= 1)
 #endif /* MIN_VERSION_gloss */
+<<<<<<< HEAD
 /* package random-1.2.1.2 */
 #ifndef VERSION_random
 #define VERSION_random "1.2.1.2"
@@ -40,6 +41,8 @@
   (major1) == 1 && (major2) <  2 || \
   (major1) == 1 && (major2) == 2 && (minor) <= 1)
 #endif /* MIN_VERSION_random */
+=======
+>>>>>>> 700dcf536f9b8936579792ee15e2e30a1de32d65
 
 /* tool gcc-13 */
 #ifndef TOOL_VERSION_gcc
@@ -133,7 +136,11 @@
 #endif /* MIN_TOOL_VERSION_strip */
 
 #ifndef CURRENT_COMPONENT_ID
+<<<<<<< HEAD
 #define CURRENT_COMPONENT_ID "projetoPFAzul-0.1.0.0-7Sz07ku46XAEVYd8dDRvkw-projetoPFAzul"
+=======
+#define CURRENT_COMPONENT_ID "projetoPFAzul-0.1.0.0-JQOqR6IbJ3V6BZBRHA8NCj-projetoPFAzul"
+>>>>>>> 700dcf536f9b8936579792ee15e2e30a1de32d65
 #endif /* CURRENT_COMPONENT_ID */
 #ifndef CURRENT_PACKAGE_VERSION
 #define CURRENT_PACKAGE_VERSION "0.1.0.0"
