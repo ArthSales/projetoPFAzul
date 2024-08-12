@@ -1,22 +1,14 @@
 /home/arthur/projetoPFAzul/CHANGELOG.md:
   hash: ef76d6cadbdec5ef0598944a07306fdbc2de02dd9beff1dc604d2a501441b370
 /home/arthur/projetoPFAzul/README.md:
-<<<<<<< HEAD
   hash: 7d0945f3ef7be5cbe91fda2b76c9bfb1a2f18fb716259c1ee44ffae1b8e51123
 /home/arthur/projetoPFAzul/projetoPFAzul.cabal:
-  hash: 1186f3d6b0e62816b16830796d375230dc5ced1995a4f3590bde0cd43e9726e7
+  hash: c41b2bd1a6b24f5ae18f6b4b09d5ca9c863bc786f02cd0f4a9ccab9bb250b3cc
 /home/arthur/projetoPFAzul/src/Data.hs:
-  hash: 3e64e05c5b345f32c280a1d4794b16465e42bdc969283742dc5bfe031f1ff64a
+  hash: 68f08ca8cdb3df12035206a6746516d426591d3771223d4617577600d94e4d69
 /home/arthur/projetoPFAzul/src/Main.hs:
-  hash: 8800fe0542439ef8a157a7c46607b545227775f2f37fd2c5f6af9bbb52923d68
+  hash: f5a65e491118c92339f0fa064b8c6c9a2c8e89522c5cb10abf18ac081a5d9997
 /home/arthur/projetoPFAzul/src/Parede.hs:
-  hash: 3577beefefa749efdb45a7b9f03b2deed8c2b081943593e8696ebfab2e6c3d86
+  hash: 1e129c1a741a653d12015989847a40dc0e2721fbcb2c2574d5360de9edbbf397
 /home/arthur/projetoPFAzul/src/SacoDeAzulejos.hs:
-  hash: 9026ad3763fba78695db76030681a3f4d70c48e3df15553a4fd00b260a85c98e
-=======
-  hash: c5867aaecff3a3f3913bc7437d3830a35589bea17ae4832fdf98a0cb096a6e1a
-/home/arthur/projetoPFAzul/projetoPFAzul.cabal:
-  hash: c439dfca2bfcaaa390b9b7ca7c5f9b79d925e37bddc5972d0f11556f89637f19
-/home/arthur/projetoPFAzul/src/Main.hs:
-  hash: 3479fdf1407be033f76997bd5c146f02bd73e9646b98431e4e5785f7c9a324be
->>>>>>> 72d6c27 (Commit antes do pull)
+  hash: e23a81d97be1f32d5886983538141e2f00ba80ab2693d5c21a4caebd2489ab17

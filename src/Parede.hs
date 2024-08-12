@@ -1,4 +1,4 @@
-module Parede (linhaInicial, Cor) where
+module Parede (linhaInicial, Cor, criarParede, atualizarMatriz) where
 
 import Data.Maybe
 import Data
