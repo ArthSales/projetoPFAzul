@@ -27,7 +27,7 @@ sacoAzulejos xs | totalAzulejos < 20 = [(20,"Azul"),(20,"Amarelo"),(20,"Vermelho
 somaAzulejo :: Cor -> Azulejos -> Azulejos
 somaAzulejo _ [] = [(20,"Azul"),(20,"Amarelo"),(20,"Vermelho"),(20,"Preto"),(20,"Branco")]
 somaAzulejo cor ((q,c):azulejos) | cor == c = (q+1, c): azulejos
-                                     | otherwise = (q,c) : somaAzulejo cor azulejos
+                                 | otherwise = (q,c) : somaAzulejo cor azulejos
 
 azulejosParaNum :: Azulejos -> Int -> [AzulejosSeparados]
 azulejosParaNum [] _ = []
