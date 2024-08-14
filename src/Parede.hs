@@ -1,7 +1,7 @@
 module Parede (linhaInicial, Cor, criarParede, atualizarMatriz) where
 
 import Data.Maybe
-import Data
+import Data1
 
 -- PAREDE
 linhaInicial :: [(Cor, Bool)] 

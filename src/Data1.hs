@@ -1,4 +1,4 @@
-module Data where
+module Data1 where
 
 -- Definindo as cores
 data Cor = Amarelo | Azul | Branco | Vermelho | Preto deriving (Show, Enum, Bounded, Eq)

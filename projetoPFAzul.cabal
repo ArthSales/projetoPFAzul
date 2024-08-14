@@ -31,4 +31,4 @@ executable projetoPFAzul
                        -Wredundant-constraints
   other-modules:       SacoDeAzulejos 
                        Parede
-                       Data
+                       Data1

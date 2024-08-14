@@ -1,8 +1,7 @@
-{-# OPTIONS_GHC -Wno-name-shadowing #-}
 module SacoDeAzulejos where
 
 import Parede
-import Data
+import Data1
 import System.Random
 import Prelude hiding (exp)
 
@@ -49,14 +48,15 @@ puxaAzulejo p (x, _) = p == x
 expositor :: [AzulejosSeparados] -> Int -> [Cor]
 expositor [] _ = []
 expositor _ 0 = []
-expositor as n = snd (head (corSorteada as)) : expositor novoSaco (n-1)
+expositor as n | length as > 4 = c : expositor as (n-1)
+               | otherwise = snd (head as) : expositor (tail as) (n-1)
   where
     sacoAs = numParaAzulejos as [(0,Azul),(0,Amarelo),(0,Vermelho),(0,Preto),(0,Branco)]
     total = totalAzulejos sacoAs
     gen = mkStdGen n
     (randomNumber, _) = randomR (0, total-1) gen
     corSorteada =  filter (puxaAzulejo randomNumber)
-    novoSaco = azulejosParaNum (subAzulejo (snd (head (corSorteada as))) (numParaAzulejos sacoAs [(0,Azul),(0,Amarelo),(0,Vermelho),(0,Preto),(0,Branco)])) 0
+    c = snd (head (corSorteada as))
 
 tiraExpositorDoSaco :: [Cor] -> Azulejos -> [AzulejosSeparados]
 tiraExpositorDoSaco cs as
