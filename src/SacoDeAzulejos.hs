@@ -1,6 +1,5 @@
 module SacoDeAzulejos where
 
-import Parede
 import Data1
 
 -- Soma o total de azulejos no Saco de Azulejos

@@ -53,3 +53,5 @@ centroDaMesa :: [Cor] -> [Cor] -> [Cor]
 centroDaMesa cs [] = cs
 centroDaMesa [] cm = cm
 centroDaMesa cs cm = cs ++ cm
+
+-- Função que tira geraExp do sacão, função que manda o resto pro centro da mesa, me preocupar com jogabilidade

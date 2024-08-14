@@ -19,7 +19,7 @@ main = do
 
    let expositores0 = geraExpositores (azulejosParaNum saco0 0) 20
    print expositores0
-
+ 
    let comp1 = compraExpositor Amarelo 0 expositores0
    print comp1
 
