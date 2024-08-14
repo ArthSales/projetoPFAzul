@@ -3,18 +3,26 @@ module Main (main, Azulejos) where
 import SacoDeAzulejos
 import Parede
 import Data
+import GHC.Float (Floating(expm1))
 
 main :: IO ()
 
 main = do
-   putStrLn "Entre com a lista de azulejos::"
-   print (sacoAzulejos [(4,Azul),(10,Amarelo),(10,Vermelho),(6,Preto),(10,Branco)])
-   print (sacoAzulejos [(0,Azul),(2,Amarelo),(3,Vermelho),(10,Preto),(5,Branco)])
-   let azulejosTeste = azulejosParaNum (sacoAzulejos [(0,Azul),(2,Amarelo),(3,Vermelho),(10,Preto),(5,Branco)]) 0
+   let azulejosTeste = azulejosParaNum (sacoAzulejos [(5,Azul),(2,Amarelo),(3,Vermelho),(5,Preto),(5,Branco)]) 0
+   let volta = numParaAzulejos azulejosTeste [(0,Azul),(0,Amarelo),(0,Vermelho),(0,Preto),(0,Branco)]
+   print volta
    print azulejosTeste
-   print (geraExpositores azulejosTeste 4)
+   let expo = expositor azulejosTeste 4
+   print expo
+   let sub = azulejosParaNum (subAzulejo Preto (numParaAzulejos azulejosTeste [(0,Azul),(0,Amarelo),(0,Vermelho),(0,Preto),(0,Branco)])) 0
+   print sub
+   let expositores = geraExpositores azulejosTeste 10
+   print expositores
 
-
+   -- let tira = tiraExpositorDoSaco expo [(5,Azul),(2,Amarelo),(3,Vermelho),(5,Preto),(5,Branco)]
+   -- print tira
+   -- let exp1 = geraExpositores azulejosTeste 8
+   -- print exp1
   --  let parede = criarParede
   --    --let patternlines = (criarPatternLines 5)
   --  let patternlines = [ [Just Amarelo, Just Amarelo, Nothing]

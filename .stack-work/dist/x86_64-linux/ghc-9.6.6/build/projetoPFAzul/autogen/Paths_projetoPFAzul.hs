@@ -47,11 +47,7 @@ getBinDir, getLibDir, getDynLibDir, getDataDir, getLibexecDir, getSysconfDir :: 
 
 bindir, libdir, dynlibdir, datadir, libexecdir, sysconfdir :: FilePath
 bindir     = "/home/arthur/projetoPFAzul/.stack-work/install/x86_64-linux/5de331d7c271bf8ea3846330fab80fc0b143a53278091c70606bdb7bfaf7753b/9.6.6/bin"
-<<<<<<< HEAD
 libdir     = "/home/arthur/projetoPFAzul/.stack-work/install/x86_64-linux/5de331d7c271bf8ea3846330fab80fc0b143a53278091c70606bdb7bfaf7753b/9.6.6/lib/x86_64-linux-ghc-9.6.6/projetoPFAzul-0.1.0.0-7Sz07ku46XAEVYd8dDRvkw-projetoPFAzul"
-=======
-libdir     = "/home/arthur/projetoPFAzul/.stack-work/install/x86_64-linux/5de331d7c271bf8ea3846330fab80fc0b143a53278091c70606bdb7bfaf7753b/9.6.6/lib/x86_64-linux-ghc-9.6.6/projetoPFAzul-0.1.0.0-JQOqR6IbJ3V6BZBRHA8NCj-projetoPFAzul"
->>>>>>> 700dcf536f9b8936579792ee15e2e30a1de32d65
 dynlibdir  = "/home/arthur/projetoPFAzul/.stack-work/install/x86_64-linux/5de331d7c271bf8ea3846330fab80fc0b143a53278091c70606bdb7bfaf7753b/9.6.6/lib/x86_64-linux-ghc-9.6.6"
 datadir    = "/home/arthur/projetoPFAzul/.stack-work/install/x86_64-linux/5de331d7c271bf8ea3846330fab80fc0b143a53278091c70606bdb7bfaf7753b/9.6.6/share/x86_64-linux-ghc-9.6.6/projetoPFAzul-0.1.0.0"
 libexecdir = "/home/arthur/projetoPFAzul/.stack-work/install/x86_64-linux/5de331d7c271bf8ea3846330fab80fc0b143a53278091c70606bdb7bfaf7753b/9.6.6/libexec/x86_64-linux-ghc-9.6.6/projetoPFAzul-0.1.0.0"

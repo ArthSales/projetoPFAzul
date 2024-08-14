@@ -1,8 +1,10 @@
+{-# OPTIONS_GHC -Wno-name-shadowing #-}
 module SacoDeAzulejos where
 
 import Parede
 import Data
 import System.Random
+import Prelude hiding (exp)
 
 --soma o total de azulejos no Saco de Azulejos
 totalAzulejos :: Azulejos -> Int
@@ -38,15 +40,38 @@ numParaAzulejos :: [AzulejosSeparados] -> Azulejos -> Azulejos
 numParaAzulejos [] azulejos = azulejos
 numParaAzulejos ((_,c):azulejosSeparados) azulejos = numParaAzulejos azulejosSeparados (somaAzulejo c azulejos)
 
+--Define a regra pra filtrar os azulejos pelo número na lista de azulejos separados, ignorando qual a cor no primeiro momento    
+puxaAzulejo :: Int -> AzulejosSeparados -> Bool
+puxaAzulejo p (x, _) = p == x
 
---A lógica para o uso da biblioteca veio da documentação, e uma ajuda do GPT para lidar com o sistema de monadas, vide link https://hackage.haskell.org/package/random-1.2.1.2/docs/System-Random.html
-geraExpositores :: [AzulejosSeparados] -> Int -> [Cor]
-geraExpositores [] _ = []
-geraExpositores _ 0 = []
-geraExpositores lsazulejos n = corSorteada ++ geraExpositores lsazulejos (n-1)
+
+-- Função para sortear uma lista de cores a partir dos azulejos
+expositor :: [AzulejosSeparados] -> Int -> [Cor]
+expositor [] _ = []
+expositor _ 0 = []
+expositor as n = snd (head (corSorteada as)) : expositor novoSaco (n-1)
   where
-    gen = mkStdGen n 
-    (randomNumber, _) = randomR (0, totalAzulejos(numParaAzulejos lsazulejos [(0,Azul),(0,Amarelo),(0,Vermelho),(0,Preto),(0,Branco)])) gen 
-    corSorteada = map snd $ filter (puxaAzulejo randomNumber) lsazulejos
-    puxaAzulejo :: Int -> AzulejosSeparados -> Bool
-    puxaAzulejo n (x, _) = n == x
+    sacoAs = numParaAzulejos as [(0,Azul),(0,Amarelo),(0,Vermelho),(0,Preto),(0,Branco)]
+    total = totalAzulejos sacoAs
+    gen = mkStdGen n
+    (randomNumber, _) = randomR (0, total-1) gen
+    corSorteada =  filter (puxaAzulejo randomNumber)
+    novoSaco = azulejosParaNum (subAzulejo (snd (head (corSorteada as))) (numParaAzulejos sacoAs [(0,Azul),(0,Amarelo),(0,Vermelho),(0,Preto),(0,Branco)])) 0
+
+tiraExpositorDoSaco :: [Cor] -> Azulejos -> [AzulejosSeparados]
+tiraExpositorDoSaco cs as
+  = azulejosParaNum (foldl
+      (\ as c
+         -> map
+              (\ (n, cor) -> if cor == c then (n - 1, cor) else (n, cor)) as)
+      as cs) 0
+
+-- Função para gerar os expositores
+geraExpositores :: [AzulejosSeparados] -> Int -> [[Cor]]
+geraExpositores [] _ = []
+geraExpositores _ n | n < 4 = []
+geraExpositores as n = expo : geraExpositores novoSaco (n-4)
+  where
+    expo = expositor as 4
+    converte = numParaAzulejos as [(0,Azul),(0,Amarelo),(0,Vermelho),(0,Preto),(0,Branco)]
+    novoSaco = tiraExpositorDoSaco expo converte
