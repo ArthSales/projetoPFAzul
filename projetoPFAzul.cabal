@@ -32,3 +32,6 @@ executable projetoPFAzul
   other-modules:       SacoDeAzulejos 
                        Parede
                        Data1
+                       Expositores
+                       Jogador1
+                       Jogador2

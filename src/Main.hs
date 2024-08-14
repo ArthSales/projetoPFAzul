@@ -1,40 +1,34 @@
 module Main (main, Azulejos) where
 
 import SacoDeAzulejos
+import Expositores
 import Parede
+import Jogador1
+import Jogador2
 import Data1
 import GHC.Float (Floating(expm1))
+
 
 main :: IO ()
 
 main = do
-   let azulejosTeste = azulejosParaNum (sacoAzulejos [(5,Azul),(2,Amarelo),(3,Vermelho),(5,Preto),(5,Branco)]) 0
-   let volta = numParaAzulejos azulejosTeste [(0,Azul),(0,Amarelo),(0,Vermelho),(0,Preto),(0,Branco)]
-   print volta
-   print azulejosTeste
-   let teste = [(0,Azul),(1,Azul),(2,Azul),(3,Azul),(4,Azul),(5,Amarelo),(6,Amarelo),(7,Vermelho),(8,Vermelho),(9,Vermelho),(10,Preto),(11,Preto),(12,Preto),(13,Preto),(14,Preto),(15,Branco),(16,Branco),(17,Branco),(18,Branco),(19,Branco)]
-   let expo = expositor teste 4
-   print expo
-   let tira = tiraExpositorDoSaco expo (numParaAzulejos teste [(0,Azul),(0,Amarelo),(0,Vermelho),(0,Preto),(0,Branco)])
-   print tira
-   let expo1 = expositor tira 4
-   print expo1
-   let tira1 = tiraExpositorDoSaco expo1 (numParaAzulejos tira [(0,Azul),(0,Amarelo),(0,Vermelho),(0,Preto),(0,Branco)])
-   print tira1
-   let expo2 = expositor tira1 4
-   print expo2
-   let tira2 = tiraExpositorDoSaco expo2 (numParaAzulejos tira1 [(0,Azul),(0,Amarelo),(0,Vermelho),(0,Preto),(0,Branco)])
-   print tira2
-   let expo3 = expositor tira2 4
-   print expo3
-   let tira3 = tiraExpositorDoSaco expo3 (numParaAzulejos tira2 [(0,Azul),(0,Amarelo),(0,Vermelho),(0,Preto),(0,Branco)])
-   print tira3
-   let expo4 = expositor tira3 4
-   print expo4
+   let jogador10 = []
+   let jogador20 = []
+   let saco0 = sacoAzulejos []
+   print saco0
 
-   print "--------------------"
-   let gerado = geraExpositores teste 20
-   print gerado
+   let expositores0 = geraExpositores (azulejosParaNum saco0 0) 20
+   print expositores0
+
+   let comp1 = compraExpositor Amarelo 0 expositores0
+   print comp1
+
+   let jogador11 = jogador1 comp1 jogador10
+   print jogador11
+
+   let comp2 = compraExpositor Amarelo 1 expositores0
+   let jogador21 = jogador2 comp2 jogador20
+   print jogador21
    -- let tira2 = tiraExpositorDoSaco expo2 (numParaAzulejos [(0,Azul),(1,Azul),(2,Azul),(3,Azul),(4,Azul),(5,Vermelho),(6,Preto),(7,Preto)] [(0,Azul),(0,Amarelo),(0,Vermelho),(0,Preto),(0,Branco)])
    -- print tira2
    -- let expo3 = expositor tira2 4
