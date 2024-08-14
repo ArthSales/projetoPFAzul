@@ -37,6 +37,14 @@ geraExpositores as n = expo : geraExpositores novoSaco (n-4)
     converte = numParaAzulejos as [(0,Azul),(0,Amarelo),(0,Vermelho),(0,Preto),(0,Branco)]
     novoSaco = tiraExpositorDoSaco expo converte
 
+--Função pra passar as infos pro novo saco
+retiraExpositores :: [[Cor]] -> Azulejos -> Azulejos
+retiraExpositores [] as = as
+retiraExpositores [expo] as = numParaAzulejos (tiraExpositorDoSaco expo as) [(0,Azul),(0,Amarelo),(0,Vermelho),(0,Preto),(0,Branco)]
+retiraExpositores (e:es) as = retiraExpositores es novoSaco
+  where
+    novoSaco = numParaAzulejos (tiraExpositorDoSaco e as) [(0,Azul),(0,Amarelo),(0,Vermelho),(0,Preto),(0,Branco)]
+
 -- Função para fazer a soma de todos os elementos dos expositores dentro de uma lista de expositores
 somaExpositores :: [[Cor]] -> Int
 somaExpositores = foldl (\acc xs -> acc + length xs) 0
@@ -54,4 +62,4 @@ centroDaMesa cs [] = cs
 centroDaMesa [] cm = cm
 centroDaMesa cs cm = cs ++ cm
 
--- Função que tira geraExp do sacão, função que manda o resto pro centro da mesa, me preocupar com jogabilidade
+-- função que manda o resto pro centro da mesa, me preocupar com jogabilidade
