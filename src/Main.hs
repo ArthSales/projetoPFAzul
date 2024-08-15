@@ -6,32 +6,42 @@ import Parede
 import Jogador1
 import Jogador2
 import Data1
-import GHC.Float (Floating(expm1))
+import Graphics.Gloss
 
+window :: Display
+window = InWindow "Nice Window" (200, 200) (10, 10)
+
+background :: Color
+background = white
+
+drawing :: Picture
+drawing = circle 80
 
 main :: IO ()
+main = display window background drawing
+   -- let jogador10 = []
+   -- let jogador20 = []
+   -- let saco0 = sacoAzulejos []
+   -- print saco0
 
-main = do
-   let jogador10 = []
-   let jogador20 = []
-   let saco0 = sacoAzulejos []
-   print saco0
+   -- let expositores0 = geraExpositores (azulejosParaNum saco0 0) 20
+   -- print expositores0
 
-   let expositores0 = geraExpositores (azulejosParaNum saco0 0) 20
-   print expositores0
-
-   let saco1 = retiraExpositores expositores0 saco0
-   print saco1
+   -- let saco1 = retiraExpositores expositores0 saco0
+   -- print saco1
  
-   let comp1 = compraExpositor Amarelo 0 expositores0
-   print comp1
+   -- let comp1 = compraExpositor Amarelo 0 expositores0
+   -- print comp1
 
-   let jogador11 = jogador1 comp1 jogador10
-   print jogador11
+   -- let jogador11 = jogador1 comp1 jogador10
+   -- print jogador11
 
-   let comp2 = compraExpositor Amarelo 1 expositores0
-   let jogador21 = jogador2 comp2 jogador20
-   print jogador21
+   -- let comp2 = compraExpositor Amarelo 1 expositores0
+   -- let jogador21 = jogador2 comp2 jogador20
+   -- print jogador21
+
+   -- let dropado = dropaExpositor expositores0 3
+   -- print dropado
    -- let tira2 = tiraExpositorDoSaco expo2 (numParaAzulejos [(0,Azul),(1,Azul),(2,Azul),(3,Azul),(4,Azul),(5,Vermelho),(6,Preto),(7,Preto)] [(0,Azul),(0,Amarelo),(0,Vermelho),(0,Preto),(0,Branco)])
    -- print tira2
    -- let expo3 = expositor tira2 4

@@ -37,6 +37,13 @@ geraExpositores as n = expo : geraExpositores novoSaco (n-4)
     converte = numParaAzulejos as [(0,Azul),(0,Amarelo),(0,Vermelho),(0,Preto),(0,Branco)]
     novoSaco = tiraExpositorDoSaco expo converte
 
+dropaExpositor :: [[Cor]] -> Int -> [[Cor]]
+dropaExpositor [] _ = []
+dropaExpositor _ n | n > 4 = error "Não devia ser passado um valor maior que 4 nas opções de expositores"
+dropaExpositor cs n | n == 0 = tail cs
+                    | 1 <= n && n <= 3 = take (n-1) cs ++ drop n cs
+                    | otherwise = take (n-1) cs
+
 --Função pra passar as infos pro novo saco
 retiraExpositores :: [[Cor]] -> Azulejos -> Azulejos
 retiraExpositores [] as = as
@@ -54,7 +61,7 @@ compraExpositor :: Cor -> Int -> [[Cor]] -> [Cor]
 compraExpositor c i es = filter (corBate c) (head (drop i es))
   where
     corBate :: Cor -> Cor -> Bool
-    corBate cs cexp = cs == cexp 
+    corBate cs cexp = cs == cexp
 
 -- Função que controla o centro da mesa, para onde o restante dos azulejos que não são comprados devem ir
 centroDaMesa :: [Cor] -> [Cor] -> [Cor]
@@ -63,3 +70,14 @@ centroDaMesa [] cm = cm
 centroDaMesa cs cm = cs ++ cm
 
 -- função que manda o resto pro centro da mesa, me preocupar com jogabilidade
+restoExpositor :: Cor -> Int -> [[Cor]] -> [Cor]
+restoExpositor c i es = filter (corBate c) (head (drop i es))
+  where
+    corBate :: Cor -> Cor -> Bool
+    corBate cs cexp = cs /= cexp
+
+data AzulGame = Game { sacoAzulejos :: Azulejos
+                       ,expositores :: [[Cor]]
+                       ,centroDaMesa0 :: [[Cor]]
+                       ,jogador1 :: [[Cor]]
+                       ,jogador2 :: [[Cor]]} deriving Show
