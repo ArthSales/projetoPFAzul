@@ -76,8 +76,4 @@ restoExpositor c i es = filter (corBate c) (head (drop i es))
     corBate :: Cor -> Cor -> Bool
     corBate cs cexp = cs /= cexp
 
-data AzulGame = Game { sacoAzulejos :: Azulejos
-                       ,expositores :: [[Cor]]
-                       ,centroDaMesa0 :: [[Cor]]
-                       ,jogador1 :: [[Cor]]
-                       ,jogador2 :: [[Cor]]} deriving Show
+ 
