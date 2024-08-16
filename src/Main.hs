@@ -154,9 +154,11 @@ data State1 = State1 {
  -- ,picture :: Picture
 }
 
+--  maoJ1 == [Azul,Azul,Azul,Azul,Azul] = State1 sa2 expo cm2 v j12 j22
+--                                                                                    | otherwise 
 trataEvento :: Event -> State1 -> State1
-trataEvento (EventKey (Char str1) Down _ _) estado@(State1 sa2 expo cm2 v j12 j22) = 
-  let 
+trataEvento (EventKey (Char str1) Down _ _) estado@(State1 sa2 expo cm2 v j12 j22) = State1 sa2 novoExpo coresCentro vez maoJ1 maoJ2
+  where
     novoExpo
       | str1 == 'q' = dropaExpositor expo 0
       | str1 == 'w' = dropaExpositor expo 0
@@ -183,38 +185,85 @@ trataEvento (EventKey (Char str1) Down _ _) estado@(State1 sa2 expo cm2 v j12 j2
       | str1 == 'k' = dropaExpositor expo 4
       | str1 == 'l' = dropaExpositor expo 4
       | str1 == 'n' = dropaExpositor expo 4
-      | otherwise = replicate 5 (replicate 4 Amarelo)
+      | otherwise = expo
     maoJ1
-      | str1 == 'q' = compraExpositor Amarelo 0 expo
-      | str1 == 'w' = compraExpositor Azul 0 expo
-      | str1 == 'e' = compraExpositor Branco 0 expo
-      | str1 == 'r' = compraExpositor Vermelho 0 expo
-      | str1 == 't' = compraExpositor Preto 0 expo
-      | str1 == 'a' = compraExpositor Amarelo 1 expo
-      | str1 == 's' = compraExpositor Azul 1 expo
-      | str1 == 'd' = compraExpositor Branco 1 expo
-      | str1 == 'f' = compraExpositor Vermelho 1 expo
-      | str1 == 'g' = compraExpositor Preto 1 expo
-      | str1 == 'z' = compraExpositor Amarelo 2 expo
-      | str1 == 'x' = compraExpositor Azul 2 expo
-      | str1 == 'c' = compraExpositor Branco 2 expo
-      | str1 == 'v' = compraExpositor Vermelho 2 expo
-      | str1 == 'b' = compraExpositor Preto 2 expo
-      | str1 == 'y' = compraExpositor Amarelo 3 expo
-      | str1 == 'u' = compraExpositor Azul 3 expo
-      | str1 == 'i' = compraExpositor Branco 3 expo
-      | str1 == 'o' = compraExpositor Vermelho 3 expo
-      | str1 == 'p' = compraExpositor Preto 3 expo
-      | str1 == 'h' = compraExpositor Amarelo 4 expo
-      | str1 == 'j' = compraExpositor Azul 4 expo
-      | str1 == 'k' = compraExpositor Branco 4 expo
-      | str1 == 'l' = compraExpositor Vermelho 4 expo
-      | str1 == 'n' = compraExpositor Preto 4 expo
-      | otherwise = []
-    coresCentro = restoExpositor (head maoJ1) 0 expo
-    maoJ2 = []
-  in State1 sa2 novoExpo coresCentro v maoJ1 maoJ2
+      | str1 == 'q' && v == 0 = jogador1 j12 (compraExpositor Amarelo 0 expo)
+      | str1 == 'w' && v == 0 = jogador1 j12 (compraExpositor Azul 0 expo)
+      | str1 == 'e' && v == 0 = jogador1 j12 (compraExpositor Branco 0 expo)
+      | str1 == 'r' && v == 0 = jogador1 j12 (compraExpositor Vermelho 0 expo)
+      | str1 == 't' && v == 0 = jogador1 j12 (compraExpositor Preto 0 expo)
+      | str1 == 'a' && v == 0 = jogador1 j12 (compraExpositor Amarelo 1 expo)
+      | str1 == 's' && v == 0 = jogador1 j12 (compraExpositor Azul 1 expo)
+      | str1 == 'd' && v == 0 = jogador1 j12 (compraExpositor Branco 1 expo)
+      | str1 == 'f' && v == 0 = jogador1 j12 (compraExpositor Vermelho 1 expo)
+      | str1 == 'g' && v == 0 = jogador1 j12 (compraExpositor Preto 1 expo)
+      | str1 == 'x' && v == 0 = jogador1 j12 (compraExpositor Azul 2 expo)
+      | str1 == 'c' && v == 0 = jogador1 j12 (compraExpositor Branco 2 expo)
+      | str1 == 'z' && v == 0 = jogador1 j12 (compraExpositor Amarelo 2 expo)
+      | str1 == 'v' && v == 0 = jogador1 j12 (compraExpositor Vermelho 2 expo)
+      | str1 == 'b' && v == 0 = jogador1 j12 (compraExpositor Preto 2 expo)
+      | str1 == 'y' && v == 0 = jogador1 j12 (compraExpositor Amarelo 3 expo)
+      | str1 == 'u' && v == 0 = jogador1 j12 (compraExpositor Azul 3 expo)
+      | str1 == 'i' && v == 0 = jogador1 j12 (compraExpositor Branco 3 expo)
+      | str1 == 'o' && v == 0 = jogador1 j12 (compraExpositor Vermelho 3 expo)
+      | str1 == 'p' && v == 0 = jogador1 j12 (compraExpositor Preto 3 expo)
+      | str1 == 'h' && v == 0 = jogador1 j12 (compraExpositor Amarelo 4 expo)
+      | str1 == 'j' && v == 0 = jogador1 j12 (compraExpositor Azul 4 expo)
+      | str1 == 'k' && v == 0 = jogador1 j12 (compraExpositor Branco 4 expo)
+      | str1 == 'l' && v == 0 = jogador1 j12 (compraExpositor Vermelho 4 expo)
+      | str1 == 'n' && v == 0 = jogador1 j12 (compraExpositor Preto 4 expo)
+      | str1 == '1' && v == 0 = jogador1 j12 (compraCentroDaMesa Amarelo cm2)
+      | str1 == '2' && v == 0 = jogador1 j12 (compraCentroDaMesa Azul cm2)
+      | str1 == '3' && v == 0 = jogador1 j12 (compraCentroDaMesa Branco cm2)
+      | str1 == '4' && v == 0 = jogador1 j12 (compraCentroDaMesa Vermelho cm2)
+      | str1 == '5' && v == 0 = jogador1 j12 (compraCentroDaMesa Preto cm2)
+      | otherwise = j12
+    coresCentro
+      | str1 == '1' = dropaCorDeLsCores Amarelo cm2
+      | str1 == '2' = dropaCorDeLsCores Azul cm2
+      | str1 == '3' = dropaCorDeLsCores Branco cm2
+      | str1 == '4' = dropaCorDeLsCores Vermelho cm2
+      | str1 == '5' = dropaCorDeLsCores Preto cm2
+      | otherwise = if v == 0 then centroDaMesa cm2 (restoExpositor (last maoJ1) 0 expo) else centroDaMesa cm2 (restoExpositor (last maoJ2) 0 expo)
+    maoJ2
+      | str1 == 'q' && v == 1 && garanteCompraSafe (compraExpositor Amarelo 0 expo) = jogador1 j22 (compraExpositor Amarelo 0 expo)
+      | str1 == 'w' && v == 1 && garanteCompraSafe (compraExpositor Azul 0 expo) = jogador1 j22 (compraExpositor Azul 0 expo)
+      | str1 == 'e' && v == 1 && garanteCompraSafe (compraExpositor Branco 0 expo) = jogador1 j22 (compraExpositor Branco 0 expo)
+      | str1 == 'r' && v == 1 && garanteCompraSafe (compraExpositor Vermelho 0 expo) = jogador1 j22 (compraExpositor Vermelho 0 expo)
+      | str1 == 't' && v == 1 && garanteCompraSafe (compraExpositor Preto 0 expo) = jogador1 j22 (compraExpositor Preto 0 expo)
+      | str1 == 'a' && v == 1 = jogador1 j22 (compraExpositor Amarelo 1 expo)
+      | str1 == 's' && v == 1 = jogador1 j22 (compraExpositor Azul 1 expo)
+      | str1 == 'd' && v == 1 = jogador1 j22 (compraExpositor Branco 1 expo)
+      | str1 == 'f' && v == 1 = jogador1 j22 (compraExpositor Vermelho 1 expo)
+      | str1 == 'g' && v == 1 = jogador1 j22 (compraExpositor Preto 1 expo)
+      | str1 == 'x' && v == 1 = jogador1 j22 (compraExpositor Azul 2 expo)
+      | str1 == 'c' && v == 1 = jogador1 j22 (compraExpositor Branco 2 expo)
+      | str1 == 'z' && v == 1 = jogador1 j22 (compraExpositor Amarelo 2 expo)
+      | str1 == 'v' && v == 1 = jogador1 j22 (compraExpositor Vermelho 2 expo)
+      | str1 == 'b' && v == 1 = jogador1 j22 (compraExpositor Preto 2 expo)
+      | str1 == 'y' && v == 1 = jogador1 j22 (compraExpositor Amarelo 3 expo)
+      | str1 == 'u' && v == 1 = jogador1 j22 (compraExpositor Azul 3 expo)
+      | str1 == 'i' && v == 1 = jogador1 j22 (compraExpositor Branco 3 expo)
+      | str1 == 'o' && v == 1 = jogador1 j22 (compraExpositor Vermelho 3 expo)
+      | str1 == 'p' && v == 1 = jogador1 j22 (compraExpositor Preto 3 expo)
+      | str1 == 'h' && v == 1 = jogador1 j22 (compraExpositor Amarelo 4 expo)
+      | str1 == 'j' && v == 1 = jogador1 j22 (compraExpositor Azul 4 expo)
+      | str1 == 'k' && v == 1 = jogador1 j22 (compraExpositor Branco 4 expo)
+      | str1 == 'l' && v == 1 = jogador1 j22 (compraExpositor Vermelho 4 expo)
+      | str1 == 'n' && v == 1 = jogador1 j22 (compraExpositor Preto 4 expo)
+      | str1 == '1' && v == 1 = jogador1 j22 (compraCentroDaMesa Amarelo cm2)
+      | str1 == '2' && v == 1 = jogador1 j22 (compraCentroDaMesa Azul cm2)
+      | str1 == '3' && v == 1 = jogador1 j22 (compraCentroDaMesa Branco cm2)
+      | str1 == '4' && v == 1 = jogador1 j22 (compraCentroDaMesa Vermelho cm2)
+      | str1 == '5' && v == 1 = jogador1 j22 (compraCentroDaMesa Preto cm2)
+      | otherwise = j22
+    vez = trocaVez v
+  -- in State1 sa2 novoExpo coresCentro v maoJ1 maoJ2
 trataEvento _ state = state
+
+trocaVez :: Int -> Int
+trocaVez x | x == 0 = 1
+           | x >= 1 = 0
 
 render  :: State1 -> Picture
 render (State1 saco exp1 cm1 v j11 j21) = tabuleiroLojas exp1 cm1 j11 j21

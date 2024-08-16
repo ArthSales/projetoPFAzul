@@ -56,14 +56,21 @@ retiraExpositores (e:es) as = retiraExpositores es novoSaco
 somaExpositores :: [[Cor]] -> Int
 somaExpositores = foldl (\acc xs -> acc + length xs) 0
 
+garanteCompraSafe :: [Cor] -> Bool
+garanteCompraSafe [] = True
+garanteCompraSafe cs = cs /= [Azul,Azul,Azul,Azul,Azul]
+
 -- Função para que o jogador faça a compra de um expositor
 compraExpositor :: Cor -> Int -> [[Cor]] -> [Cor]
-compraExpositor c i es | null filtrada = [Azul,Azul,Azul,Azul,Azul]
+compraExpositor c i es | i > (length es - 1) || null filtrada = [Azul,Azul,Azul,Azul,Azul]
                        | otherwise = filtrada
   where
     corBate :: Cor -> Cor -> Bool
     corBate cs cexp = cs == cexp
     filtrada = filter (corBate c) (head (drop i es))
+
+-- >>> compraExpositor Azul 3 [[Amarelo,Preto,Amarelo,Vermelho],[Amarelo,Preto,Amarelo,Vermelho],[Amarelo,Preto,Amarelo,Vermelho],[Amarelo,Preto,Amarelo,Vermelho]]
+-- [Azul,Azul,Azul,Azul,Azul]
 
 -- Função que controla o centro da mesa, para onde o restante dos azulejos que não são comprados devem ir
 centroDaMesa :: [Cor] -> [Cor] -> [Cor]
@@ -71,7 +78,29 @@ centroDaMesa cs [] = cs
 centroDaMesa [] cm = cm
 centroDaMesa cs cm = cs ++ cm
 
--- função que manda o resto pro centro da mesa, me preocupar com jogabilidade
+dropaCorDeLsCores :: Cor -> [Cor] -> [Cor]
+dropaCorDeLsCores _ [] = []
+dropaCorDeLsCores c (cor:cs) | corBate c cor = dropaCorDeLsCores c cs
+                             | otherwise = cor: dropaCorDeLsCores c cs
+  where
+    corBate :: Cor -> Cor -> Bool
+    corBate cs1 cexp = cs1 == cexp
+
+-- >>> dropaCorDeLsCores Preto [Preto,Preto,Preto,Vermelho]
+-- [Vermelho]
+
+
+compraCentroDaMesa :: Cor -> [Cor] -> [Cor]
+compraCentroDaMesa c es = filtrada
+  where
+    corBate :: Cor -> Cor -> Bool
+    corBate cs cexp = cs == cexp
+    filtrada = filter (corBate c) es
+
+-- >>> compraCentroDaMesa Preto [Vermelho,Preto,Vermelho,Preto,Vermelho,Preto]
+-- [Preto,Preto,Preto]
+
+-- Função que manda o resto pro centro da mesa
 restoExpositor :: Cor -> Int -> [[Cor]] -> [Cor]
 restoExpositor c i es = filter (corBate c) (head (drop i es))
   where
