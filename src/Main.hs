@@ -6,72 +6,77 @@ import Parede
 import Jogador1
 import Jogador2
 import Data1
+import Jogo
 import Graphics.Gloss
+import Graphics.Gloss.Interface.Pure.Game
+import Data.Char (digitToInt)
+import Data.Bits (Bits(xor))
+-- Define the state of the game
 
-window :: Display
-window = InWindow "Nice Window" (200, 200) (10, 10)
+data State = State Picture deriving (Show, Eq)
 
-background :: Color
-background = white
-
-drawing :: Picture
-drawing = circle 80
+data GameState = GameState { input1 :: Maybe Char
+                           , input2 :: Maybe Char
+                           , picture :: State
+                           } deriving Show
 
 main :: IO ()
-main = display window background drawing
-   -- let jogador10 = []
-   -- let jogador20 = []
-   -- let saco0 = sacoAzulejos []
-   -- print saco0
+main = do
+   let sacoInicial = sacoAzulejos []
+       expoInicial = geraExpositores (azulejosParaNum sacoInicial 0) 20
+       imagem = tabuleiroLojas expoInicial [] [] []
+       estadoInicial = GameState Nothing Nothing (State imagem)
 
-   -- let expositores0 = geraExpositores (azulejosParaNum saco0 0) 20
-   -- print expositores0
+   play
+      (InWindow "Bad Window" (700, 700) (100, 140))  -- Cria uma janela
+      white                                          -- Cor de fundo
+      30                                             -- Número de frames por segundo
+      estadoInicial                                 -- Estado inicial com a imagem
+      desenha                                  -- Função para desenhar o estado
+      (trataEvento imagem expoInicial)                          -- Função para lidar com eventos
+      atualiza
 
-   -- let saco1 = retiraExpositores expositores0 saco0
-   -- print saco1
- 
-   -- let comp1 = compraExpositor Amarelo 0 expositores0
-   -- print comp1
+desenha :: GameState -> Picture
+desenha (GameState Nothing Nothing (State img)) = img
+desenha (GameState (Just _) Nothing (State img)) = img
+desenha (GameState Nothing (Just _) (State img)) = img
+desenha (GameState (Just _) (Just _) (State img)) = img
 
-   -- let jogador11 = jogador1 comp1 jogador10
-   -- print jogador11
+-- trataEvento :: Picture -> [[Cor]] ->   Event -> GameState -> GameState
+-- trataEvento img1 expo (EventKey (Char c) Down _ _) (State img)
+--     | isNothing (input1 state) = state { input1 = Just c }
+--     | isNothing (input2 state) = state { input2 = Just c }
+--     | img == img1 = State (criaImagem input1 input2 expo)
+--     | otherwise = State img1
+-- trataEvento _ _ _  estado = estado
 
-   -- let comp2 = compraExpositor Amarelo 1 expositores0
-   -- let jogador21 = jogador2 comp2 jogador20
-   -- print jogador21
+trataEvento :: Picture -> [[Cor]] ->   Event -> GameState -> GameState
+trataEvento img1 expo (EventKey (Char c) Down _ _) (GameState _ _ img)
+    | img == State img1 = GameState Nothing Nothing (State (criaImagem (Just c)  (Just c) expo))
+    | otherwise = GameState Nothing Nothing (State img1)
+   -- where
+   --    | (input1 state) == Nothing = state { input1 = Just c }
+   --    | (input2 state) == Nothing = state { input2 = Just c }
+trataEvento _ _ _  estado = estado
 
-   -- let dropado = dropaExpositor expositores0 3
-   -- print dropado
-   -- let tira2 = tiraExpositorDoSaco expo2 (numParaAzulejos [(0,Azul),(1,Azul),(2,Azul),(3,Azul),(4,Azul),(5,Vermelho),(6,Preto),(7,Preto)] [(0,Azul),(0,Amarelo),(0,Vermelho),(0,Preto),(0,Branco)])
-   -- print tira2
-   -- let expo3 = expositor tira2 4
-   -- print expo3
-   -- let sub = azulejosParaNum (subAzulejo Preto (numParaAzulejos azulejosTeste [(0,Azul),(0,Amarelo),(0,Vermelho),(0,Preto),(0,Branco)])) 0
-   -- print sub
-   -- let expositores = geraExpositores azulejosTeste 20
-   -- print expositores
-   
 
-   -- let tira = tiraExpositorDoSaco expo [(5,Azul),(2,Amarelo),(3,Vermelho),(5,Preto),(5,Branco)]
-   -- print tira
-   -- let exp1 = geraExpositores azulejosTeste 8
-   -- print exp1
-  --  let parede = criarParede
-  --    --let patternlines = (criarPatternLines 5)
-  --  let patternlines = [ [Just Amarelo, Just Amarelo, Nothing]
-  --                       , [Just Azul, Just Azul]
-  --                       , [Just Preto, Just Preto]
-  --                       , [Just Vermelho, Just Vermelho]
-  --                       , [Just Amarelo, Just Amarelo]
-  --                       ]
-  --  mapM_ print parede
-  --  mapM_ print patternlines
 
-  --  let (paredeAtualizada, patternLinesAtualizadas) = atualizarMatriz parede patternlines
+atualiza :: Float -> GameState -> GameState
+atualiza _ estado = estado
 
-  --  putStrLn "\nParede atualizada:"
-  --  mapM_ print paredeAtualizada
-  --  putStrLn "\nPattern Lines atualizadas:"
-  --  mapM_ print patternLinesAtualizadas
+tira :: Maybe Char -> Char
+tira Nothing = 'm'
+tira (Just x) = x
+
+criaImagem :: Maybe Char -> Maybe Char -> [[Cor]] -> Picture
+criaImagem str1 str2 expo = tabuleiroLojas novoExpo coresCentro maoJ1 maoJ2
+    where
+    novoExpo
+      | str1 ==  (Just 'p') || str2 == Just 'r' = [[],[]]
+      | otherwise = replicate 5 (replicate 4 Amarelo)
+
+    coresCentro = replicate 15 Preto
+    maoJ1 = replicate 15 Preto
+    maoJ2 = replicate 15 Preto
 
 
