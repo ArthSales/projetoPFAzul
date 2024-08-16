@@ -58,10 +58,12 @@ somaExpositores = foldl (\acc xs -> acc + length xs) 0
 
 -- Função para que o jogador faça a compra de um expositor
 compraExpositor :: Cor -> Int -> [[Cor]] -> [Cor]
-compraExpositor c i es = filter (corBate c) (head (drop i es))
+compraExpositor c i es | null filtrada = [Azul,Azul,Azul,Azul,Azul]
+                       | otherwise = filtrada
   where
     corBate :: Cor -> Cor -> Bool
     corBate cs cexp = cs == cexp
+    filtrada = filter (corBate c) (head (drop i es))
 
 -- Função que controla o centro da mesa, para onde o restante dos azulejos que não são comprados devem ir
 centroDaMesa :: [Cor] -> [Cor] -> [Cor]
@@ -76,4 +78,3 @@ restoExpositor c i es = filter (corBate c) (head (drop i es))
     corBate :: Cor -> Cor -> Bool
     corBate cs cexp = cs /= cexp
 
- 
