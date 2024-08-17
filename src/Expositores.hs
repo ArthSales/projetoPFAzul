@@ -69,11 +69,6 @@ compraExpositor c i es | i > (length es - 1) || null filtrada = [Azul,Azul,Azul,
     corBate cs cexp = cs == cexp
     filtrada = filter (corBate c) (head (drop i es))
 
--- Função que controla o centro da mesa, para onde o restante dos azulejos que não são comprados devem ir
-centroDaMesa :: [Cor] -> [Cor] -> [Cor]
-centroDaMesa cs [] = cs
-centroDaMesa [] cm = cm
-centroDaMesa cs cm = cs ++ cm
 
 dropaCorDeLsCores :: Cor -> [Cor] -> [Cor]
 dropaCorDeLsCores _ [] = []
