@@ -13,19 +13,19 @@ expositor as n | length as > 4 = c : expositor as (n-1)
   where
     sacoAs = numParaAzulejos as [(0,Azul),(0,Amarelo),(0,Vermelho),(0,Preto),(0,Branco)]
     total = totalAzulejos sacoAs
-    gen = mkStdGen n
+    gen = mkStdGen (n+2)
     (randomNumber, _) = randomR (0, total-1) gen
     corSorteada =  filter (puxaAzulejo randomNumber)
     c = snd (head (corSorteada as))
 
 -- Função que retira de uma lista de azulejos os azulejos que foram sorteados para o expositor 
 tiraExpositorDoSaco :: [Cor] -> Azulejos -> [AzulejosSeparados]
-tiraExpositorDoSaco cs as
+tiraExpositorDoSaco cs azs
   = azulejosParaNum (foldl
-      (\ as c
+      (\ azs c
          -> map
-              (\ (n, cor) -> if cor == c then (n - 1, cor) else (n, cor)) as)
-      as cs) 0
+              (\ (n, cor) -> if cor == c then (n - 1, cor) else (n, cor)) azs)
+      azs cs) 0
 
 -- Função para gerar os expositores das fábricas
 geraExpositores :: [AzulejosSeparados] -> Int -> [[Cor]]
@@ -42,7 +42,7 @@ dropaExpositor [] _ = []
 dropaExpositor _ n | n > 4 = error "Não devia ser passado um valor maior que 4 nas opções de expositores"
 dropaExpositor cs n | n == 0 = tail cs
                     | 1 <= n && n <= 3 = take (n-1) cs ++ drop n cs
-                    | otherwise = take (n-1) cs
+                    | otherwise = take n cs
 
 --Função pra passar as infos pro novo saco
 retiraExpositores :: [[Cor]] -> Azulejos -> Azulejos
@@ -69,9 +69,6 @@ compraExpositor c i es | i > (length es - 1) || null filtrada = [Azul,Azul,Azul,
     corBate cs cexp = cs == cexp
     filtrada = filter (corBate c) (head (drop i es))
 
--- >>> compraExpositor Azul 3 [[Amarelo,Preto,Amarelo,Vermelho],[Amarelo,Preto,Amarelo,Vermelho],[Amarelo,Preto,Amarelo,Vermelho],[Amarelo,Preto,Amarelo,Vermelho]]
--- [Azul,Azul,Azul,Azul,Azul]
-
 -- Função que controla o centro da mesa, para onde o restante dos azulejos que não são comprados devem ir
 centroDaMesa :: [Cor] -> [Cor] -> [Cor]
 centroDaMesa cs [] = cs
@@ -85,9 +82,6 @@ dropaCorDeLsCores c (cor:cs) | corBate c cor = dropaCorDeLsCores c cs
   where
     corBate :: Cor -> Cor -> Bool
     corBate cs1 cexp = cs1 == cexp
-
--- >>> dropaCorDeLsCores Preto [Preto,Preto,Preto,Vermelho]
--- [Vermelho]
 
 
 compraCentroDaMesa :: Cor -> [Cor] -> [Cor]
