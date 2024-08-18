@@ -1,6 +1,7 @@
 module Jogo where
 
 import Graphics.Gloss
+import Graphics.Gloss.Data.Picture
 import Graphics.Gloss.Interface.Pure.Game
 import Data1
 
@@ -53,16 +54,23 @@ transladar ((x,y):xs) x1 y1 = (x+x1,y+y1) : transladar xs x1 y1
 textos :: [String]
 textos = ["1", "2", "3", "4", "5", "6", "Jogador 1", "Jogador 2"]
 
+teclasBMP :: IO Picture
+teclasBMP = loadBMP "src/assets/teclas.bmp"
+
 -- as proximas funções definem as posições dos objetos
 posicoesLojas :: [(Float, Float)]
-posicoesLojas = [(200,100),(-150,-150),(150,-150),(-200,100),(0,220)]
+-- posicoesLojas = [(200,100),(-150,-150),(150,-150),(-200,100),(0,220)]
+posicoesLojas = [(0,100),(-350,-150),(-50,-150),(-400,100),(-200,220)]
 
 posicoesTextos :: [(Float, Float)]
-posicoesTextos = [(-50, 300), (130, 165), (180, -70), (-200, -70), 
-                  (-270, 165), (-10,90), (-340, -260), (0, -260)]
+-- posicoesTextos = [(-50, 300), (130, 165), (180, -70), (-200, -70), 
+--                   (-270, 165), (-10,90), (-340, -260), (0, -260)]
+posicoesTextos = [(-250, 300), (-70, 165), (-20, -70), (-400, -70), 
+                  (-470, 165), (-210,90), (-540, -260), (-200, -260)]
 
 posicaoAzulejoInicial :: [(Float, Float)]
-posicaoAzulejoInicial = [(-35,235),(10,235),(-35,185),(10,185)]
+--posicaoAzulejoInicial = [(-35,235),(10,235),(-35,185),(10,185)]
+posicaoAzulejoInicial = [(-235,235),(-190,235),(-235,185),(-190,185)]
 
 posicoesAzulejos :: [[(Float, Float)]]
 posicoesAzulejos = [posicaoAzulejoInicial,
@@ -73,26 +81,33 @@ posicoesAzulejos = [posicaoAzulejoInicial,
                     ]
 
 posicoesAzulejosCentro :: [(Float, Float)]
-posicoesAzulejosCentro = [(-70,60),(-30,60),(10,60),(50,60),
-                    (-70,10),(-30,10),(10,10),(50,10),
-                    (-70,-40),(-30,-40),(10,-40),(50,-40),
-                    (-55,-90),(-15,-90),(25,-90)]
+-- posicoesAzulejosCentro = [(-70,60),(-30,60),(10,60),(50,60),
+--                     (-70,10),(-30,10),(10,10),(50,10),
+--                     (-70,-40),(-30,-40),(10,-40),(50,-40),
+--                     (-55,-90),(-15,-90),(25,-90)]
+posicoesAzulejosCentro = [(-270,60),(-230,60),(-190,60),(-150,60),
+                    (-270,10),(-230,10),(-190,10),(-150,10),
+                    (-270,-40),(-230,-40),(-190,-40),(-150,-40),
+                    (-255,-90),(-215,-90),(-175,-90)]
 
 posicoesJ1 :: [(Float, Float)]
-posicoesJ1 = [(-340,-300),(-305,-300),(-270,-300),(-235,-300),(-200,-300),(-165,-300),(-130,-300),(-95,-300),
-              (-340,-340),(-305,-340),(-270,-340),(-235,-340),(-200,-340),(-165,-340),(-130,-340)]
+-- posicoesJ1 = [(-340,-300),(-305,-300),(-270,-300),(-235,-300),(-200,-300),(-165,-300),(-130,-300),(-95,-300),
+--               (-340,-340),(-305,-340),(-270,-340),(-235,-340),(-200,-340),(-165,-340),(-130,-340)]
+posicoesJ1 = [(-540,-300),(-505,-300),(-470,-300),(-435,-300),(-400,-300),(-365,-300),(-330,-300),(-295,-300),
+              (-540,-340),(-505,-340),(-470,-340),(-435,-340),(-400,-340),(-365,-340),(-330,-340)]
 
 posicoesJ2 :: [(Float, Float)]
 posicoesJ2 = transladar posicoesJ1 340 0
 
 -- essa função será usada, a cada rodada, para receber as cores presentes nos expositores, no centro, e nas 'mãos' de cada jogador
 -- a função também posiciona os elementos para representar o estado do jogo a cada rodada.
-tabuleiroLojas :: [[Cor]] -> [Cor] -> [Cor] -> [Cor] -> Picture
-tabuleiroLojas expo cent j1 j2 = 
+tabuleiroLojas :: Picture -> [[Cor]] -> [Cor] -> [Cor] -> [Cor] -> Picture
+tabuleiroLojas img expo cent j1 j2 = 
     pictures ([translate x y (scale 0.2 0.2 (text num)) | ((x , y) , num) <- zip posicoesTextos textos]
     ++ [translate x y loja | (x,y) <- posicoesLojas]
-    ++ [translate 0 0 centro] 
+    ++ [translate (-200) 0 centro] 
     ++ [translate x y azulejo | (x, y, azulejo) <- juntaPosicoesCores posicoesAzulejos (corParaAzulejoList expo)] 
     ++ [translate x y azulejo | ((x, y), azulejo) <- zip posicoesAzulejosCentro $ map corParaAzulejo cent]
     ++ [translate x y azulejo | ((x, y), azulejo) <- zip posicoesJ1 $ map corParaAzulejo j1]
-    ++ [translate x y azulejo | ((x, y), azulejo) <- zip posicoesJ2 $ map corParaAzulejo j2])
+    ++ [translate x y azulejo | ((x, y), azulejo) <- zip posicoesJ2 $ map corParaAzulejo j2]
+    ++ [translate 350 0 (scale 0.8 0.8 img)])

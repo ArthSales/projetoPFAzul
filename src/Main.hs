@@ -267,8 +267,8 @@ trocaVez :: Int -> Int
 trocaVez x | x == 0 = 1
            | x >= 1 = 0
 
-render  :: State1 -> Picture
-render (State1 saco exp1 cm1 v j11 j21) = tabuleiroLojas exp1 cm1 j11 j21
+render  :: Picture -> State1 -> Picture
+render img (State1 saco exp1 cm1 v j11 j21) = tabuleiroLojas img exp1 cm1 j11 j21
 
 update :: Float -> State1 -> State1
 update _ state = state
@@ -283,12 +283,12 @@ main = do
       --  j2 = []
        vez = 0
        estadoInicial = State1 sacoInicial expoInicial [] vez [] []
-
+   img <- teclasBMP
    play
-      (InWindow "Azul in Haskell" (700, 700) (100, 140))  -- Cria uma janela
-      white                                          -- Cor de fundo
+      (InWindow "Azul in Haskell" (1030, 700) (10, 10))  -- Cria uma janela
+      (makeColorI 105 105 105 255)                                       -- Cor de fundo
       30                                             -- Número de frames por segundo
       estadoInicial                                 -- Estado inicial com a imagem
-      render                                  -- Função para desenhar o estado
+      (render img)                                 -- Função para desenhar o estado
       trataEvento                          -- Função para lidar com eventos
       update
