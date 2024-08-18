@@ -41,8 +41,11 @@ dropaExpositor :: [[Cor]] -> Int -> [[Cor]]
 dropaExpositor [] _ = []
 dropaExpositor _ n | n > 4 = error "Não devia ser passado um valor maior que 4 nas opções de expositores"
 dropaExpositor cs n | n == 0 = tail cs
-                    | 1 <= n && n <= 3 = take (n-1) cs ++ drop n cs
+                    | 1 <= n && n <= 3 = take n cs ++ drop (n+1) cs
                     | otherwise = take n cs
+
+-- >>> dropaExpositor [[Amarelo],[Azul],[Branco],[Vermelho]] 2 
+-- [[Amarelo],[Branco],[Vermelho]]
 
 --Função pra passar as infos pro novo saco
 retiraExpositores :: [[Cor]] -> Azulejos -> Azulejos
@@ -86,13 +89,9 @@ compraCentroDaMesa c es = filtrada
     corBate cs cexp = cs == cexp
     filtrada = filter (corBate c) es
 
--- >>> compraCentroDaMesa Preto [Vermelho,Preto,Vermelho,Preto,Vermelho,Preto]
--- [Preto,Preto,Preto]
-
 -- Função que manda o resto pro centro da mesa
 restoExpositor :: Cor -> Int -> [[Cor]] -> [Cor]
 restoExpositor c i es = filter (corBate c) (head (drop i es))
   where
     corBate :: Cor -> Cor -> Bool
     corBate cs cexp = cs /= cexp
-
