@@ -5,9 +5,6 @@ import Graphics.Gloss.Data.Picture
 import Graphics.Gloss.Interface.Pure.Game
 import Data1
 
-window :: Display
-window = InWindow "Bad Window" (700 , 700) (100, 140)
-
 loja :: Picture
 loja = color (makeColorI 110 53 7 255) (circleSolid 80)
 

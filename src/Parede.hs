@@ -53,22 +53,3 @@ atualizarPattern pat
     | todosIguais pat && not (null pat) = map (const Nothing) pat
     | otherwise = pat
 
--- main :: IO ()
--- main = do
---     let parede = criarParede
---     --let patternlines = (criarPatternLines 5)
---     let patternlines = [ [Just Amarelo, Just Amarelo, Nothing]
---                        , [Just Azul, Just Azul]
---                        , [Just Preto, Just Preto]
---                        , [Just Vermelho, Just Vermelho]
---                        , [Just Amarelo, Just Amarelo]
---                        ]
---     mapM_ print parede
---     mapM_ print patternlines
-
---     let (paredeAtualizada, patternLinesAtualizadas) = atualizarMatriz parede patternlines
-    
---     putStrLn "\nParede atualizada:"
---     mapM_ print paredeAtualizada
---     putStrLn "\nPattern Lines atualizadas:"
---     mapM_ print patternLinesAtualizadas

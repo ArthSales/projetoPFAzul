@@ -10,21 +10,8 @@ import Data1
 import Jogo
 import Graphics.Gloss
 import Graphics.Gloss.Interface.Pure.Game
-import Data.Char (digitToInt)
-import System.Posix.Internals (statGetType)
--- Define the state of the game
+    ( Key(Char), KeyState(Down), Event(EventKey) )
 
-data State = State Picture deriving (Show, Eq)
-
-data State1 = State1 {
-  sa :: Azulejos
-  ,expositores :: [[Cor]]
-  ,cm :: [Cor]
-  ,deQuemEAVez :: Int
-  ,j1 :: [Cor]
-  ,j2 :: [Cor]
- -- ,picture :: Picture
-}
 trataEvento :: Event -> State1 -> State1
 trataEvento (EventKey (Char str1) Down _ _) estado@(State1 sa2 expo cm2 v j12 j22)
   | take 5 (reverse maoJ1) == [Azul,Azul,Azul,Azul,Azul] && v == 0 = State1 sa2 expo cm2 v j12 maoJ2
@@ -141,7 +128,7 @@ trataEvento _ state = state
 
 trocaVez :: Int -> Int
 trocaVez x | x == 0 = 1
-           | x >= 1 = 0
+           | otherwise = 0
 
 render  :: Picture -> State1 -> Picture
 render img (State1 saco exp1 cm1 v j11 j21) = tabuleiroLojas img exp1 cm1 j11 j21
@@ -153,18 +140,14 @@ main :: IO ()
 main = do
    let sacoInicial = sacoAzulejos []
        expoInicial = geraExpositores (azulejosParaNum sacoInicial 0) 20
-      --  imagem = tabuleiroLojas expoInicial [] [] []
-      --  cm = []
-      --  j1 = []
-      --  j2 = []
        vez = 0
        estadoInicial = State1 sacoInicial expoInicial [] vez [] []
    img <- teclasBMP
    play
       (InWindow "Azul in Haskell" (1280, 720) (10, 10))  -- Cria uma janela
-      (makeColorI 105 105 105 255)                                       -- Cor de fundo
-      30                                             -- Número de frames por segundo
-      estadoInicial                                 -- Estado inicial com a imagem
-      (render img)                                 -- Função para desenhar o estado
-      trataEvento                          -- Função para lidar com eventos
+      (makeColorI 105 105 105 255)                       -- Cor de fundo
+      30                                                 -- Número de frames por segundo
+      estadoInicial                                      -- Estado inicial com a imagem
+      (render img)                                       -- Função para desenhar o estado
+      trataEvento                                        -- Função para lidar com eventos
       update
