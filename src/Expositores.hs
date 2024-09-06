@@ -69,6 +69,10 @@ compraExpositor c i es | i > (length es - 1) || null filtrada = [Azul,Azul,Azul,
     corBate cs cexp = cs == cexp
     filtrada = filter (corBate c) (head (drop i es))
 
+-- Joga resultado da compra no contexto do Maybe pra ser usada em outros códigos
+colocaCompraNoMaybe :: [Cor] -> [Maybe Cor]
+colocaCompraNoMaybe = foldr ((:) . Just) []
+
 
 dropaCorDeLsCores :: Cor -> [Cor] -> [Cor]
 dropaCorDeLsCores _ [] = []
