@@ -12,35 +12,37 @@ proximaLinha :: Int -> [(a, Bool)] -> [(a, Bool)]
 proximaLinha n xs = drop k xs ++ take k xs
     where k = length xs - (n `mod` length xs)
 
-criarParede :: [LinhaParede]
+criarParede :: [LinhaParede] 
 criarParede = [proximaLinha n linhaInicial | n <- [0..4]]
+-- >>> criarParede
+-- [[(Azul,False),(Amarelo,False),(Vermelho,False),(Preto,False),(Branco,False)],[(Branco,False),(Azul,False),(Amarelo,False),(Vermelho,False),(Preto,False)],[(Preto,False),(Branco,False),(Azul,False),(Amarelo,False),(Vermelho,False)],[(Vermelho,False),(Preto,False),(Branco,False),(Azul,False),(Amarelo,False)],[(Amarelo,False),(Vermelho,False),(Preto,False),(Branco,False),(Azul,False)]]
 
 -- PATTERN LINES
--- essa função não devia retornar um monte de nothing?
 criarPatternLines :: Int -> [[Maybe Cor]]
 criarPatternLines n = map criarSubPattern [1..n]
     where
         criarSubPattern :: Int -> [Maybe Cor]
-        criarSubPattern size = take size (map Just cores ++ repeat Nothing)
+        criarSubPattern size = replicate size Nothing
 
-        cores :: [Cor]
-        cores = [minBound .. maxBound]
+-- >>> criarPatternLines 5
+-- [[Nothing],[Nothing,Nothing],[Nothing,Nothing,Nothing],[Nothing,Nothing,Nothing,Nothing],[Nothing,Nothing,Nothing,Nothing,Nothing]]
 
+-- Verifica se todos os elementos de uma lista são iguais
 todosIguais :: Eq a => [Maybe a] -> Bool
 todosIguais [] = True
 todosIguais (x:xs) = all (== x) xs
 
-atualizarLinha :: [Maybe Cor] -> LinhaParede -> LinhaParede
+atualizarLinha :: [Maybe Cor] -> [(Cor, Bool)] -> [(Cor, Bool)]
 atualizarLinha pat linha
-  | todosIguais pat && not (null pat) = map atualizarElemento linha
+  | todosIguais pat && not (null pat) = map atualizarElemento linha -- se os azulejos forem iguais e se nao tiver vazia
   | otherwise = linha
   where
-    elementoComum = fromMaybe (head (Data.Maybe.catMaybes pat)) (head pat)
-
+    corPattern = head (Data.Maybe.catMaybes pat) --pega primeiro elemento (cor)
+    -- catMaybes: remove todos os nothing e retorna só os valores just fora do contexto
     atualizarElemento :: (Cor, Bool) -> (Cor, Bool)
-    atualizarElemento (cor, b)
-      | cor == elementoComum = (cor, True)
-      | otherwise = (cor, b)
+    atualizarElemento (corParede, b)
+      | corParede == corPattern = (corParede, True)
+      | otherwise = (corParede, b)
 
 atualizarMatriz :: [LinhaParede] -> [[Maybe Cor]] -> ([LinhaParede], [[Maybe Cor]])
 atualizarMatriz parede patternLines =
@@ -48,10 +50,22 @@ atualizarMatriz parede patternLines =
         patternLinesAtualizadas = map atualizarPattern patternLines
     in (paredeAtualizada, patternLinesAtualizadas)
 
-atualizarPattern :: [Maybe Cor] -> [Maybe Cor]
+atualizarPattern :: [Maybe Cor] -> [Maybe Cor] 
+-- se a parede estiver cheia com azulejo iguais, atualiza tudo para nothing 
 atualizarPattern pat
     | todosIguais pat && not (null pat) = map (const Nothing) pat
     | otherwise = pat
+
+-- >>> atualizarPattern [Just Amarelo,Just Amarelo]
+-- [Nothing,Nothing]
+
+-- >>> atualizarLinha [Just Azul,Just Azul] [(Azul, False), (Amarelo, False)]
+-- [(Azul,True),(Amarelo,False)]
+
+-- >>> atualizarMatriz [[Just Azul,Just Azul], [Just Amarelo,Just Amarelo]] [[(Azul, False), (Amarelo, False)], [(Azul, False), (Amarelo, False)]] 
+-- ([[(Azul,True),(Amarelo,False)],[(Azul,False),(Amarelo,True)]],[[Nothing,Nothing],[Nothing,Nothing]])
+
+
 
 --Linhas de chão
 
