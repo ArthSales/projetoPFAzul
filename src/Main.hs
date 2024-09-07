@@ -11,6 +11,8 @@ import Jogo
 import Graphics.Gloss
 import Graphics.Gloss.Interface.Pure.Game
     ( Key(Char), KeyState(Down), Event(EventKey) )
+import System.Random (RandomGen(next))
+
 
 trataEvento :: Event -> State1 -> State1
 trataEvento (EventKey (Char str1) Down _ _) estado@(State1 sa2 expo cm2 v j12 j22)
@@ -151,3 +153,39 @@ main = do
       (render img)                                       -- Função para desenhar o estado
       trataEvento                                        -- Função para lidar com eventos
       update
+
+
+-- initialState :: State2
+-- initialState = State2 (sacoAzulejos []) (geraExpositores (azulejosParaNum (sacoAzulejos []) 0) 20) [] 0 [] [] 0 []
+
+-- -- data State2 = State2 {
+-- --   sa1 :: Azulejos
+-- --   ,expositores1 :: [[Cor]]
+-- --   ,cm1 :: [Cor]
+-- --   ,deQuemEAVez1 :: Int
+-- --   ,j11 :: [Cor]
+-- --   ,j21 :: [Cor]
+-- --   ,pontj11 :: Int
+-- --  -- ,picture :: Picture
+-- -- } deriving Show
+
+-- attChao :: [Chao] -> State2 -> State2
+-- attChao c s@(State2 sa exp cm v j1 j2 pontj111 _) = State2 sa exp cm v j1 j2 pontj111 c
+
+-- nextPont :: [Chao] -> State2 -> (Int,State2)
+-- nextPont [] s@(State2 sa exp cm v j1 j2 pontj111 chao1) = (pontj111,s)
+-- nextPont chao@(c:cs) s@(State2 sa exp cm v j1 j2 pontj111 chao1) | c == AzulejoQuebrado = (newPont , State2 sa exp cm v j1 j2 newPont chao)
+--                                                 | otherwise = nextPont cs (State2 sa exp cm v j1 j2 newPont chao)
+--   where
+--     newPont = pontj111-1
+
+-- -- >>>nextPont [AzulejoQuebrado,AzulejoQuebrado,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio] initialState
+-- -- (-1,State2 {sa1 = [(20,Azul),(20,Amarelo),(20,Vermelho),(20,Preto),(20,Branco)], expositores1 = [[Branco,Preto,Amarelo,Vermelho],[Branco,Preto,Amarelo,Vermelho],[Branco,Branco,Amarelo,Vermelho],[Azul,Branco,Amarelo,Vermelho],[Amarelo,Branco,Amarelo,Vermelho]], cm1 = [], deQuemEAVez1 = 0, j11 = [], j21 = [], pontj11 = -1, chao1 = [AzulejoQuebrado,AzulejoQuebrado,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio]})
+
+-- -- atualizaPontChao :: [Chao] -> (Int, State2)
+-- -- atualizaPontChao [] = (0, initialState)
+-- -- atualizaPontChao (c:cs) | c == AzulejoQuebrado = ((- 1) pontj11 , initialState)
+-- --                               | otherwise = atualizaPontChao cs
+
+-- -- atualizaPontChaoST :: (Int,State2)
+-- -- atualizaPontChaoST = state atualizaPontChao

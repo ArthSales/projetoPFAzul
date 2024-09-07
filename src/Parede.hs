@@ -67,4 +67,3 @@ quebraAzulejo _ = AzulejoQuebrado
 atualizaChao :: [Cor] -> [Chao] -> [Chao]
 atualizaChao r ci = map quebraAzulejo (take (length r) ci) ++ drop (length r) ci
 
-

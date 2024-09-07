@@ -15,7 +15,8 @@ type AzulejosSeparados = (Int,Cor) --Separa azulejo pra que tenha valor numéric
 type LinhaParede = [(Cor, Bool)]
 
 -- Define o estado do jogo
-newtype State = State Picture deriving (Show, Eq)
+--newtype State = State Picture deriving (Show, Eq)
+newtype State s a = State (s -> (a, s))
 
 data State1 = State1 {
   sa :: Azulejos
@@ -27,4 +28,17 @@ data State1 = State1 {
  -- ,picture :: Picture
 }
 
-newtype StateST s a = StateST (s -> a,s)
+data State2 = State2 {
+  sa1 :: Azulejos
+  ,expositores1 :: [[Cor]]
+  ,cm1 :: [Cor]
+  ,deQuemEAVez1 :: Int
+  ,j11 :: [Cor]
+  ,j21 :: [Cor]
+  ,pontj11 :: Int
+  ,chao1 :: [Chao]
+ -- ,picture :: Picture
+} deriving Show
+
+type GameState = State1
+type GameST a = State GameState a
