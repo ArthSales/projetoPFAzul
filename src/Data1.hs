@@ -1,3 +1,5 @@
+
+
 module Data1 where
 
 import Graphics.Gloss
@@ -10,6 +12,7 @@ data Chao = Vazio | AzulejoQuebrado deriving (Show, Enum, Bounded, Eq)
 -- Definindo Azulejos
 type Azulejos = [(Int,Cor)] --Saco de azulejos que mantém a quantidade de cada cor ainda restante
 type AzulejosSeparados = (Int,Cor) --Separa azulejo pra que tenha valor numérico atrelado
+type LinhaParede = [(Cor, Bool)]
 
 -- Define o estado do jogo
 newtype State = State Picture deriving (Show, Eq)
@@ -23,3 +26,5 @@ data State1 = State1 {
   ,j2 :: [Cor]
  -- ,picture :: Picture
 }
+
+newtype StateST s a = StateST (s -> a,s)

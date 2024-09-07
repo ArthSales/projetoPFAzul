@@ -5,9 +5,9 @@
 /home/arthur/projetoPFAzul/projetoPFAzul.cabal:
   hash: f79e92478899ad3f7afb65d05a3aa10b652a67b44a9223c3c51f865a1e09c895
 /home/arthur/projetoPFAzul/src/Data1.hs:
-  hash: 274f3b599266b67078c58346db1e7957aa8de238e3b925a95e995504440994be
+  hash: da0830f61966761a6e045ac6c492a7685156291515b214ac76a54007fdebb10d
 /home/arthur/projetoPFAzul/src/Expositores.hs:
-  hash: 8c20781572f5fcff5f4106cc87b04ccb66979b12d2797b79e6a1a39b44c52c95
+  hash: 2af94110c018cb86883c89ebd8c4fb4bb9f0784c8d7be05aaa993c7e49c46af8
 /home/arthur/projetoPFAzul/src/Jogador1.hs:
   hash: 467bde1d1d6e0aec6cb5f001531e81281592780d385fb0eddb02f7cc6044221e
 /home/arthur/projetoPFAzul/src/Jogo.hs:
@@ -15,6 +15,6 @@
 /home/arthur/projetoPFAzul/src/Main.hs:
   hash: 65b2f962ff50179599d056c749a98436c7e5f645a5da3679445f438aada81613
 /home/arthur/projetoPFAzul/src/Parede.hs:
-  hash: a1fe925d7c307d54106cda5a731e413b9993dfb6b0a372e7d6d9bde3e5455c47
+  hash: 27796d452daef77371d59d389bf5cc40ea0f649eb9e2e5d0eac950e0dc7ef6c2
 /home/arthur/projetoPFAzul/src/SacoDeAzulejos.hs:
   hash: ea1d2f05c5aba2f8b37d81992cfb0df6cb3c42140bbd56655577494d82433271

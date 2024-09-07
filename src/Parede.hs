@@ -5,14 +5,14 @@ import Data.Maybe
 import Data1
 
 -- PAREDE
-linhaInicial :: [(Cor, Bool)]
+linhaInicial :: LinhaParede
 linhaInicial = [(Azul, False), (Amarelo, False), (Vermelho, False), (Preto, False), (Branco, False)]
 
 proximaLinha :: Int -> [(a, Bool)] -> [(a, Bool)]
 proximaLinha n xs = drop k xs ++ take k xs
     where k = length xs - (n `mod` length xs)
 
-criarParede :: [[(Cor, Bool)]]
+criarParede :: [LinhaParede]
 criarParede = [proximaLinha n linhaInicial | n <- [0..4]]
 
 -- PATTERN LINES
@@ -30,7 +30,7 @@ todosIguais :: Eq a => [Maybe a] -> Bool
 todosIguais [] = True
 todosIguais (x:xs) = all (== x) xs
 
-atualizarLinha :: [Maybe Cor] -> [(Cor, Bool)] -> [(Cor, Bool)]
+atualizarLinha :: [Maybe Cor] -> LinhaParede -> LinhaParede
 atualizarLinha pat linha
   | todosIguais pat && not (null pat) = map atualizarElemento linha
   | otherwise = linha
@@ -42,7 +42,7 @@ atualizarLinha pat linha
       | cor == elementoComum = (cor, True)
       | otherwise = (cor, b)
 
-atualizarMatriz :: [[(Cor, Bool)]] -> [[Maybe Cor]] -> ([[(Cor, Bool)]], [[Maybe Cor]])
+atualizarMatriz :: [LinhaParede] -> [[Maybe Cor]] -> ([LinhaParede], [[Maybe Cor]])
 atualizarMatriz parede patternLines =
     let paredeAtualizada = zipWith atualizarLinha patternLines parede
         patternLinesAtualizadas = map atualizarPattern patternLines
