@@ -11,11 +11,8 @@ import Jogo
 import Graphics.Gloss
 import Graphics.Gloss.Interface.Pure.Game
     ( Key(Char), KeyState(Down), Event(EventKey) )
-<<<<<<< HEAD
 import System.Random (RandomGen(next))
-=======
 import Data.Char (digitToInt)
->>>>>>> 33f308f (inputs e imagens)
 
 
 trataEvento :: Event -> State1 -> State1
@@ -85,20 +82,19 @@ update _ state = state
 
 main :: IO ()
 main = do
-<<<<<<< HEAD
-   let sacoInicial = sacoAzulejos []
-       expoInicial = geraExpositores (azulejosParaNum sacoInicial 0) 20
-       vez = 0
-       estadoInicial = State1 sacoInicial expoInicial [] vez [] []
-   img <- teclasBMP
-   play
-      (InWindow "Azul in Haskell" (1280, 720) (10, 10))  -- Cria uma janela
-      (makeColorI 105 105 105 255)                       -- Cor de fundo
-      30                                                 -- Número de frames por segundo
-      estadoInicial                                      -- Estado inicial com a imagem
-      (render img)                                       -- Função para desenhar o estado
-      trataEvento                                        -- Função para lidar com eventos
-      update
+  --  let sacoInicial = sacoAzulejos []
+  --      expoInicial = geraExpositores (azulejosParaNum sacoInicial 0) 20
+  --      vez = 0
+  --      estadoInicial = State1 sacoInicial expoInicial [] vez [] []
+  --  img <- teclasBMP
+  --  play
+  --     (InWindow "Azul in Haskell" (1280, 720) (10, 10))  -- Cria uma janela
+  --     (makeColorI 105 105 105 255)                       -- Cor de fundo
+  --     30                                                 -- Número de frames por segundo
+  --     estadoInicial                                      -- Estado inicial com a imagem
+  --     (render img)                                       -- Função para desenhar o estado
+  --     trataEvento                                        -- Função para lidar com eventos
+  --     update
 
 
 -- initialState :: State2
@@ -135,7 +131,6 @@ main = do
 
 -- -- atualizaPontChaoST :: (Int,State2)
 -- -- atualizaPontChaoST = state atualizaPontChao
-=======
   let sacoInicial = sacoAzulejos []
       expoInicial = geraExpositores (azulejosParaNum sacoInicial 0) 20
       vez = 0
@@ -160,4 +155,3 @@ carregaImagens = do
   vermelho <- loadBMP "src/assets/azulejo_vermelho.bmp"
   preto <- loadBMP "src/assets/azulejo_preto.bmp"
   return [(Amarelo, amarelo), (Azul, azul), (Branco, branco), (Vermelho, vermelho), (Preto, preto)]
->>>>>>> 33f308f (inputs e imagens)

@@ -13,14 +13,9 @@ type Azulejos = [(Int,Cor)] --Saco de azulejos que mantém a quantidade de cada 
 type AzulejosSeparados = (Int,Cor) --Separa azulejo pra que tenha valor numérico atrelado
 type LinhaParede = [(Cor, Bool)]
 type Pontuacao = Int
+
 -- Define o estado do jogo
-<<<<<<< HEAD
---newtype State = State Picture deriving (Show, Eq)
---newtype State s = State (s -> s)
--- newtype ST s = ST (s -> s)
-=======
-newtype State = State (IO Picture)
->>>>>>> 33f308f (inputs e imagens)
+
 
 data State1 = State1 {
   sa :: Azulejos
