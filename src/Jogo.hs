@@ -72,7 +72,22 @@ obtemImagem :: [(Cor, Picture)] -> Cor -> Picture
 obtemImagem imagens cor = case lookup cor imagens of
   Just img -> scale 0.08 0.08 img  -- Aplica um redimensionamento de 50% em ambas as direções
   Nothing -> Blank  -- Caso não encontre a imagem, retorna uma imagem em branco
-  
+
+listaPattern :: [(Cor, Picture)] -> Maybe Cor -> Picture
+listaPattern imagens cor = case lookup cor imagensContexto of
+  Just img -> scale 0.08 0.08 img  
+  Nothing -> Blank 
+  where
+    imagensContexto = maybeCor imagens
+    maybeCor :: [(Cor, Picture)] -> [(Maybe Cor, Picture)]
+    maybeCor [] = []
+    maybeCor ((x,y):xs) = (Just x, y) : maybeCor xs 
+
+picturesPattern :: [Maybe Cor] -> [(Cor, Picture)] -> [Picture]
+picturesPattern [] _ = []
+picturesPattern (x:xs) imagens = listaPattern imagens x : picturesPattern xs imagens
+
+
 tabuleiroLojas :: [(Cor, Picture)] -> Picture -> [[Cor]] -> [Cor] -> [Cor] -> [Cor] -> Picture
 tabuleiroLojas tuplas tabuleiros expo cent azj1 azj2 =
   let azulejosExpo = map (map (obtemImagem tuplas)) expo

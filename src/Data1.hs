@@ -17,22 +17,22 @@ type Pontuacao = Int
 -- Define o estado do jogo
 
 
-data State1 = State1 {
+-- data State1 = State1 {
+--   sa :: Azulejos
+--   ,expositores :: [[Cor]]
+--   ,cm :: [Cor]
+--   ,deQuemEAVez :: Int
+--   ,j1 :: [Cor]
+--   ,j2 :: [Cor]
+--   ,inputs :: [Char]
+--  -- , imagens :: [(Cor, Picture)]
+-- } deriving Show
+
+data State2 = State2 {
   sa :: Azulejos
   ,expositores :: [[Cor]]
   ,cm :: [Cor]
   ,deQuemEAVez :: Int
-  ,j1 :: [Cor]
-  ,j2 :: [Cor]
---,inputs :: [Char]
---,imagens :: [(Cor, Picture)]
-} deriving Show
-
-data State2 = State2 {
-  sa1 :: Azulejos
-  ,expositores1 :: [[Cor]]
-  ,cm1 :: [Cor]
-  ,deQuemEAVez1 :: Int
   ,chao1 :: [Chao]
   ,chao2 :: [Chao]
   ,pl1 :: [[Maybe Cor]]

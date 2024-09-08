@@ -15,15 +15,15 @@ import System.Random (RandomGen(next))
 import Data.Char (digitToInt)
 
 
-trataEvento :: Event -> State1 -> State1
-trataEvento (EventKey (Char c) Down _ _) st@(State1 sa2 expo cm2 v j12 j22 i)
+trataEvento :: Event -> State2 -> State2
+trataEvento (EventKey (Char c) Down _ _) st@(State2 sa2 expo cm2 v j12 j22 i)
   | length newInputs == 2 = processarInputs newInputs st { inputs = [] }
   | otherwise = st { inputs = newInputs }
   where
     newInputs = i ++ [c]
 
     -- Função para processar a lista de dois inputs
-    processarInputs :: [Char] -> State1 -> State1
+    processarInputs :: [Char] -> State2 -> State2
     processarInputs [] estado = estado
     processarInputs [_] estado  = estado
     processarInputs (_:_:_:_) estado = estado
@@ -74,10 +74,10 @@ trocaVez x | x == 0 = 1
 
 -- render  :: Picture -> State1 -> Picture
 -- render img (State1 saco exp1 cm1 v j11 j21) = tabuleiroLojas img exp1 cm1 j11 j21
-render :: [(Cor, Picture)] -> Picture -> State1 -> Picture
-render imagens tabuleiros (State1 _ exp1 cm1 _ j11 j21 i) = tabuleiroLojas imagens tabuleiros exp1 cm1 j11 j21
+render :: [(Cor, Picture)] -> Picture -> State2 -> Picture
+render imagens tabuleiros (State2 _ exp1 cm1 _ c1 c2 pt1 pt2 p1 p2 p _) = tabuleiroLojas imagens tabuleiros exp1 cm1 c1 c2 pt1 pt2 p1 p2 p
 
-update :: Float -> State1 -> State1
+update :: Float -> State2 -> State2
 update _ state = state
 
 main :: IO ()
@@ -88,7 +88,7 @@ main = do
       vez = 0
   imagens <- carregaImagens
   tabuleiro <- loadBMP "src/assets/tabuleiro.bmp"
-  let estadoInicial = State1 sacoInicial expoInicial [] vez [] [] []
+  let estadoInicial = State2 sacoInicial expoInicial [] vez [] [] (criarPatternLines 5) (criarPatternLines 5) criarParede criarParede (0, 0) []
   play
     (InWindow "Azul in Haskell" (1280, 720) (10, 10))  -- Cria uma janela
     (makeColorI 105 105 105 255)                       -- Cor de fundo
@@ -107,3 +107,4 @@ carregaImagens = do
   vermelho <- loadBMP "src/assets/azulejo_vermelho.bmp"
   preto <- loadBMP "src/assets/azulejo_preto.bmp"
   return [(Amarelo, amarelo), (Azul, azul), (Branco, branco), (Vermelho, vermelho), (Preto, preto)]
+

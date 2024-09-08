@@ -117,7 +117,7 @@ contaTruesParede ((_,b):as) | not b = contaTruesParede as
 
 attPontuacao :: State2 ->  State2
 attPontuacao s0@(State2 s e m v c1 c2 pl1 pl2 p1 p2 p i) =
-  State2 { sa1 = s, expositores1 = e, cm1 = m, deQuemEAVez1 = v, chao1 = c1, chao2 = c2, pl1 = pl1, pl2 = pl2, parede1 = p1, parede2 = p2, pontuacoes = (pn1,pn2), inputs = []}
+  State2 { sa = s, expositores = e, cm = m, deQuemEAVez = v, chao1 = c1, chao2 = c2, pl1 = pl1, pl2 = pl2, parede1 = p1, parede2 = p2, pontuacoes = (pn1,pn2)}
     where
       pn1 = sum (fmap contaTruesParede p1) - length c1
       pn2 = sum (fmap contaTruesParede p2) - length c2
