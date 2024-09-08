@@ -24,8 +24,8 @@ data State1 = State1 {
   ,deQuemEAVez :: Int
   ,j1 :: [Cor]
   ,j2 :: [Cor]
-  ,inputs :: [Char]
- -- , imagens :: [(Cor, Picture)]
+--,inputs :: [Char]
+--,imagens :: [(Cor, Picture)]
 } deriving Show
 
 data State2 = State2 {
@@ -40,6 +40,7 @@ data State2 = State2 {
   ,parede1 :: [LinhaParede]
   ,parede2 :: [LinhaParede]
   ,pontuacoes :: (Pontuacao,Pontuacao)
+  ,inputs :: [Char]
  -- ,picture :: Picture
 } deriving Show
 

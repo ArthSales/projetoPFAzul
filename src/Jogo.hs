@@ -92,3 +92,10 @@ tabuleiroLojas tuplas tabuleiros expo cent azj1 azj2 =
       azulejosTraduzidosJ2 = [translate x y azulejo | ((x, y), azulejo) <- zip posicoesJ2 azulejosJ2]
 
   in pictures (textosTraduzidos ++ lojasTraduzidas ++ [centroTraduzido] ++ azulejosTraduzidosExpo ++ azulejosTraduzidosCent ++ azulejosTraduzidosJ1 ++ azulejosTraduzidosJ2 ++ [tabuleiro1] ++ [tabuleiro2])
+
+montaParede :: [(Cor,Picture)] -> (Cor,Bool) -> Picture
+montaParede [] _ = Blank
+montaParede imagens (c,False) = Blank
+montaParede imagens (c,True) = case lookup c imagens of
+  Just img -> scale 0.08 0.08 img 
+  Nothing -> Blank

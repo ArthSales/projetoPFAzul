@@ -99,9 +99,9 @@ atualizaChao r ci = map quebraAzulejo (take (length r) ci) ++ drop (length r) ci
 --atualiza PatternLine
 compraPraPatternLine :: [Maybe Cor] -> Int -> State2 -> State2
 compraPraPatternLine [] i s = s
-compraPraPatternLine compra@(c:cs) i s0@(State2 s e m v c1 c2 pl1 pl2 p1 p2 p) 
-  | v == 0 = State2 s e m v (sobra ++ c1) c2 novoPl pl2 p1 p2 p
-  | otherwise = State2 s e m v c1 (sobra ++ c2) pl1 novoPl p1 p2 p
+compraPraPatternLine compra@(c:cs) i s0@(State2 s e m v c1 c2 pl1 pl2 p1 p2 p inp) 
+  | v == 0 = State2 s e m v (sobra ++ c1) c2 novoPl pl2 p1 p2 p inp
+  | otherwise = State2 s e m v c1 (sobra ++ c2) pl1 novoPl p1 p2 p inp
   where
     tamanhoEscolhida = length (pl1 !! i)
     novoPl | v == 0 = take i pl1 ++ [subPl compra (pl1 !! i)] ++ drop (i+1) pl1
@@ -115,7 +115,7 @@ compraPraPatternLine compra@(c:cs) i s0@(State2 s e m v c1 c2 pl1 pl2 p1 p2 p)
     sobra = fmap quebraAzulejo (drop tamanhoEscolhida compra)
 
 estadoInicial :: State2
-estadoInicial = State2 (sacoAzulejos []) [] [] 0 [] [] (criarPatternLines 5) [] [] [] (0,0)
+estadoInicial = State2 (sacoAzulejos []) [] [] 0 [] [] (criarPatternLines 5) [] [] [] (0,0) []
 
 -- >>> compraPraPatternLine [Just Amarelo, Just Amarelo, Just Amarelo] 1 estadoInicial
 -- State2 {sa1 = [(20,Azul),(20,Amarelo),(20,Vermelho),(20,Preto),(20,Branco)], expositores1 = [], cm1 = [], deQuemEAVez1 = 0, chao1 = [AzulejoQuebrado], chao2 = [], pl1 = [[Nothing],[Just Amarelo,Just Amarelo],[Nothing,Nothing,Nothing],[Nothing,Nothing,Nothing,Nothing],[Nothing,Nothing,Nothing,Nothing,Nothing]], pl2 = [], parede1 = [], parede2 = []}
