@@ -31,7 +31,7 @@ azulejosParaNum [] _ = []
 azulejosParaNum ((0, _):xs) acc = azulejosParaNum xs acc
 azulejosParaNum (x:xs) acc = (acc,snd x): azulejosParaNum ((fst x - 1, snd x):xs) (acc+1)
 
--- Transforma uma lista de azulejos sequências no saco de azulejos
+-- Transforma uma lista de azulejos sequenciais no saco de azulejos
 numParaAzulejos :: [AzulejosSeparados] -> Azulejos -> Azulejos
 numParaAzulejos [] azulejos = azulejos
 numParaAzulejos ((_,c):azulejosSeparados) azulejos = numParaAzulejos azulejosSeparados (somaAzulejo c azulejos)
