@@ -14,9 +14,13 @@ type AzulejosSeparados = (Int,Cor) --Separa azulejo pra que tenha valor numéric
 type LinhaParede = [(Cor, Bool)]
 type Pontuacao = Int
 -- Define o estado do jogo
+<<<<<<< HEAD
 --newtype State = State Picture deriving (Show, Eq)
 --newtype State s = State (s -> s)
 -- newtype ST s = ST (s -> s)
+=======
+newtype State = State (IO Picture)
+>>>>>>> 33f308f (inputs e imagens)
 
 data State1 = State1 {
   sa :: Azulejos
@@ -25,8 +29,9 @@ data State1 = State1 {
   ,deQuemEAVez :: Int
   ,j1 :: [Cor]
   ,j2 :: [Cor]
- -- ,picture :: Picture
-}
+  ,inputs :: [Char]
+ -- , imagens :: [(Cor, Picture)]
+} deriving Show
 
 data State2 = State2 {
   sa1 :: Azulejos

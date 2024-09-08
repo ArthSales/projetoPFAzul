@@ -47,6 +47,7 @@ dropaExpositor cs n | n == 0 = tail cs
                     | 1 <= n && n <= 3 = take n cs ++ drop (n+1) cs
                     | otherwise = take n cs
 
+
 --Função pra passar as infos pro novo saco
 retiraExpositores :: [[Cor]] -> Azulejos -> Azulejos
 retiraExpositores [] as = as

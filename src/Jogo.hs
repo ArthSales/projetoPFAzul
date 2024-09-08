@@ -1,33 +1,16 @@
 module Jogo where
-
+import Data.Maybe
 import Graphics.Gloss
 import Graphics.Gloss.Data.Picture
 import Graphics.Gloss.Interface.Pure.Game
 import Data1
+import SacoDeAzulejos (azulejosParaNum)
 
 loja :: Picture
 loja = color (makeColorI 110 53 7 255) (circleSolid 80)
 
 centro :: Picture
 centro = circle 120
-
--- função que transforma o tipo Cor para um quadrado da respectiva cor
-corParaAzulejo :: Cor -> Picture
-corParaAzulejo Amarelo = color yellow $ polygon [(0,0),(25,0),(25,25),(0,25)]
-corParaAzulejo Azul = color blue $ polygon [(0,0),(25,0),(25,25),(0,25)]
-corParaAzulejo Branco = color white $ polygon [(0,0),(25,0),(25,25),(0,25)]
-corParaAzulejo Vermelho = color red $ polygon [(0,0),(25,0),(25,25),(0,25)]
-corParaAzulejo Preto = color black $ polygon [(0,0),(25,0),(25,25),(0,25)]
-
--- representa um azulejo vazio, para ser usado em lojas que foram compradas
-azulejoVazio :: Picture
-azulejoVazio = polygon [(0,0)]
-
--- aplica as duas funções acima para transformar uma lista de expositores em uma lista de quadrado (representação dos azulejos)
-corParaAzulejoList :: [[Cor]] -> [[Picture]]
-corParaAzulejoList [] = []
-corParaAzulejoList ([]:xs) = [azulejoVazio,azulejoVazio,azulejoVazio,azulejoVazio] : corParaAzulejoList xs
-corParaAzulejoList (xs:xss) = map corParaAzulejo xs : corParaAzulejoList xss
 
 -- recebe uma lista com as posições de cada azulejo dentro dos expositores e uma lista com os quadrados da cor de cada
 -- azulejo dentro dos expositores, transformando em uma lista de triplas com as posções x e y e os quadrados
@@ -51,15 +34,12 @@ transladar ((x,y):xs) x1 y1 = (x+x1,y+y1) : transladar xs x1 y1
 textos :: [String]
 textos = ["1", "2", "3", "4", "5", "6", "Jogador 1", "Jogador 2"]
 
-teclasBMP :: IO Picture
-teclasBMP = loadBMP "src/assets/teclas.bmp"
-
 -- as proximas funções definem as posições dos objetos
 posicoesLojas :: [(Float, Float)]
 posicoesLojas = [(0,100),(-350,-150),(-50,-150),(-400,100),(-200,220)]
 
 posicoesTextos :: [(Float, Float)]
-posicoesTextos = [(-250, 300), (-70, 165), (-20, -70), (-400, -70), 
+posicoesTextos = [(-250, 300), (-70, 165), (-20, -70), (-400, -70),
                   (-470, 165), (-210,90), (-540, -260), (-200, -260)]
 
 posicaoAzulejoInicial :: [(Float, Float)]
@@ -87,15 +67,28 @@ posicoesJ1 = [(-540,-300),(-505,-300),(-470,-300),(-435,-300),(-400,-300),(-365,
 posicoesJ2 :: [(Float, Float)]
 posicoesJ2 = transladar posicoesJ1 340 0
 
--- essa função será usada, a cada rodada, para receber as cores presentes nos expositores, no centro, e nas 'mãos' de cada jogador
--- a função também posiciona os elementos para representar o estado do jogo a cada rodada.
-tabuleiroLojas :: Picture -> [[Cor]] -> [Cor] -> [Cor] -> [Cor] -> Picture
-tabuleiroLojas img expo cent j1 j2 = 
-    pictures ([translate x y (scale 0.2 0.2 (text num)) | ((x , y) , num) <- zip posicoesTextos textos]
-    ++ [translate x y loja | (x,y) <- posicoesLojas]
-    ++ [translate (-200) 0 centro] 
-    ++ [translate x y azulejo | (x, y, azulejo) <- juntaPosicoesCores posicoesAzulejos (corParaAzulejoList expo)] 
-    ++ [translate x y azulejo | ((x, y), azulejo) <- zip posicoesAzulejosCentro $ map corParaAzulejo cent]
-    ++ [translate x y azulejo | ((x, y), azulejo) <- zip posicoesJ1 $ map corParaAzulejo j1]
-    ++ [translate x y azulejo | ((x, y), azulejo) <- zip posicoesJ2 $ map corParaAzulejo j2]
-    ++ [translate 350 0 (scale 0.8 0.8 img)])
+-- Função que retorna a imagem da cor correspondente
+obtemImagem :: [(Cor, Picture)] -> Cor -> Picture
+obtemImagem imagens cor = case lookup cor imagens of
+  Just img -> scale 0.08 0.08 img  -- Aplica um redimensionamento de 50% em ambas as direções
+  Nothing -> Blank  -- Caso não encontre a imagem, retorna uma imagem em branco
+  
+tabuleiroLojas :: [(Cor, Picture)] -> Picture -> [[Cor]] -> [Cor] -> [Cor] -> [Cor] -> Picture
+tabuleiroLojas tuplas tabuleiros expo cent azj1 azj2 =
+  let azulejosExpo = map (map (obtemImagem tuplas)) expo
+      azulejosCent = map (obtemImagem tuplas) cent
+      azulejosJ1 = map (obtemImagem tuplas) azj1
+      azulejosJ2 = map (obtemImagem tuplas) azj2
+
+      -- Combina as transformações
+      textosTraduzidos = [translate x y (scale 0.2 0.2 (text num)) | ((x , y) , num) <- zip posicoesTextos textos]
+      lojasTraduzidas = [translate x y loja | (x, y) <- posicoesLojas]
+      centroTraduzido = translate (-200) 0 centro
+      tabuleiro1 = translate 330 200 (scale 0.4 0.4 tabuleiros)
+      tabuleiro2 = translate 330 (-150) (scale 0.4 0.4 tabuleiros)
+      azulejosTraduzidosExpo = [translate x y azulejo | (x, y, azulejo) <- juntaPosicoesCores posicoesAzulejos azulejosExpo]
+      azulejosTraduzidosCent = [translate x y azulejo | ((x, y), azulejo) <- zip posicoesAzulejosCentro azulejosCent]
+      azulejosTraduzidosJ1 = [translate x y azulejo | ((x, y), azulejo) <- zip posicoesJ1 azulejosJ1]
+      azulejosTraduzidosJ2 = [translate x y azulejo | ((x, y), azulejo) <- zip posicoesJ2 azulejosJ2]
+
+  in pictures (textosTraduzidos ++ lojasTraduzidas ++ [centroTraduzido] ++ azulejosTraduzidosExpo ++ azulejosTraduzidosCent ++ azulejosTraduzidosJ1 ++ azulejosTraduzidosJ2 ++ [tabuleiro1] ++ [tabuleiro2])
