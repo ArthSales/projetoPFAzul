@@ -5,6 +5,7 @@ module Main (main, Azulejos) where
 import SacoDeAzulejos ( azulejosParaNum, sacoAzulejos )
 import Expositores
 import Parede
+import Rodada
 import Jogador1
 import Data1
 import Jogo
@@ -16,8 +17,8 @@ import Data.Char (digitToInt)
 
 
 trataEvento :: Event -> State2 -> State2
-trataEvento (EventKey (Char c) Down _ _) st@(State2 sa2 expo cm2 v j12 j22 i)
-  | length newInputs == 2 = processarInputs newInputs st { inputs = [] }
+trataEvento (EventKey (Char c) Down _ _) st@(State2 sa2 expo cm v c1 c2 pl1 pl2 p1 p2 p i)
+  | length newInputs == 3 = processarInputs newInputs st { inputs = [] }
   | otherwise = st { inputs = newInputs }
   where
     newInputs = i ++ [c]
@@ -26,17 +27,12 @@ trataEvento (EventKey (Char c) Down _ _) st@(State2 sa2 expo cm2 v j12 j22 i)
     processarInputs :: [Char] -> State2 -> State2
     processarInputs [] estado = estado
     processarInputs [_] estado  = estado
-    processarInputs (_:_:_:_) estado = estado
-    processarInputs [str1, str2] estado = estado {
-      expositores = novoExpo,
-      cm = novoCoresCentro,
-      deQuemEAVez = novaVez,
-      j1 = novoJ12,
-      j2 = novoJ22,
-      inputs = []
-    }
+    processarInputs [_,_] estado = estado
+    processarInputs (_:_:_:_:_) estado = estado
+    processarInputs [str1, str2, str3] estado = novoEstado
       where
         nloja = digitToInt str1 - 1
+        npl = digitToInt str3 - 1
         cor 
           | str2 == 'a' = Amarelo
           | str2 == 'p' = Preto
@@ -44,28 +40,36 @@ trataEvento (EventKey (Char c) Down _ _) st@(State2 sa2 expo cm2 v j12 j22 i)
           | str2 == 'v' = Vermelho
           | str2 == 'z' = Azul
           | otherwise = error "Cor não identificada"
+        novoEstado | nloja == 5 = nextRound (compraPraPatternLine (compraNoContexto $ compraCentroDaMesa cor cm) nloja npl estado)
+                   | otherwise = nextRound (compraPraPatternLine (compraNoContexto $ compraExpositor cor nloja expo) nloja npl estado)
+      --   novoExpo
+      --     | nloja == 5 = expo
+      --     | otherwise = dropaExpositor expo nloja
 
-        novoExpo
-          | nloja == 5 = expo
-          | otherwise = dropaExpositor expo nloja
+      --   novoCoresCentro
+      --     | nloja == 5 = dropaCorDeLsCores cor cm2
+      --     | otherwise = if v == 0 
+      --                   then incrementaCores (restoExpositor (last novoJ12) nloja expo) cm2
+      --                   else incrementaCores (restoExpositor (last novoJ22) nloja expo) cm2
         
-        novoJ12
-          | nloja == 5 && v == 0 = incrementaCores j12 (compraCentroDaMesa cor cm2)
-          | v == 0 = incrementaCores j12 (compraExpositor cor nloja expo)
-          | otherwise = j12 -- Se não se encaixa em nenhum caso, mantém o valor antigo
+      --   novaVez = trocaVez v
 
-        novoCoresCentro
-          | nloja == 5 = dropaCorDeLsCores cor cm2
-          | otherwise = if v == 0 
-                        then incrementaCores (restoExpositor (last novoJ12) nloja expo) cm2
-                        else incrementaCores (restoExpositor (last novoJ22) nloja expo) cm2
-        novoJ22
-          | nloja == 5 && v == 1 = incrementaCores j22 (compraCentroDaMesa cor cm2)
-          | v == 1 = incrementaCores j22 (compraExpositor cor nloja expo)
-          | otherwise = j22 -- Se não se encaixa em nenhum caso, mantém o valor antigo
+      --  novoC1 = if v == 0 then atualizaChao (restoExpositor (last $ compraExpositor cor nloja expo) nloja expo) c1 else c1
 
-        novaVez = trocaVez v
+      --  novoC2 = if v == 1 then atualizaChao (restoExpositor (last $ compraExpositor cor nloja expo) nloja expo) c2 else c2
 
+      --   novoC1 = compraPraPatternLIne
+
+      --  novoJ12
+      --    | nloja == 5 && v == 0 = incrementaCores j12 (compraCentroDaMesa cor cm2)
+      --    | v == 0 = incrementaCores j12 (compraExpositor cor nloja expo)
+      --    | otherwise = j12 --Se não se encaixa em nenhum caso, mantém o valor antigo
+
+        
+      --  novoJ22
+      --    | nloja == 5 && v == 1 = incrementaCores j22 (compraCentroDaMesa cor cm2)
+      --    | v == 1 = incrementaCores j22 (compraExpositor cor nloja expo)
+      --    | otherwise = j22 --Se não se encaixa em nenhum caso, mantém o valor antigo
 trataEvento _ state = state
 
 trocaVez :: Int -> Int
@@ -75,7 +79,7 @@ trocaVez x | x == 0 = 1
 -- render  :: Picture -> State1 -> Picture
 -- render img (State1 saco exp1 cm1 v j11 j21) = tabuleiroLojas img exp1 cm1 j11 j21
 render :: [(Cor, Picture)] -> Picture -> State2 -> Picture
-render imagens tabuleiros (State2 _ exp1 cm1 _ c1 c2 pt1 pt2 p1 p2 p _) = tabuleiroLojas imagens tabuleiros exp1 cm1 c1 c2 pt1 pt2 p1 p2 p
+render imagens tabuleiros (State2 _ exp1 cm1 _ c1 c2 pt1 pt2 p1 p2 p _) = tabuleiroLojas imagens tabuleiros exp1 cm1 pt1 pt2 p1 p2 p
 
 update :: Float -> State2 -> State2
 update _ state = state

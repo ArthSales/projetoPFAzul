@@ -94,6 +94,9 @@ compraCentroDaMesa c es = filtrada
     corBate cs cexp = cs == cexp
     filtrada = filter (corBate c) es
 
+-- >>> compraCentroDaMesa Amarelo [Amarelo, Amarelo, Azul, Vermelho]
+-- [Amarelo,Amarelo]
+
 -- Função que manda o resto pro centro da mesa
 restoExpositor :: Cor -> Int -> [[Cor]] -> [Cor]
 restoExpositor c i es = filter (corBate c) (head (drop i es))
@@ -116,8 +119,13 @@ contaTruesParede ((_,b):as) | not b = contaTruesParede as
                             | otherwise = 1 + contaTruesParede as
 
 attPontuacao :: State2 ->  State2
-attPontuacao s0@(State2 s e m v c1 c2 pl1 pl2 p1 p2 p i) =
-  State2 { sa = s, expositores = e, cm = m, deQuemEAVez = v, chao1 = c1, chao2 = c2, pl1 = pl1, pl2 = pl2, parede1 = p1, parede2 = p2, pontuacoes = (pn1,pn2)}
+attPontuacao s0@(State2 s e m v c1 c2 pl1 pl2 p1 p2 (po1,po2) i) =
+  State2 { sa = s, expositores = e, cm = m, deQuemEAVez = v, chao1 = c1, chao2 = c2, pl1 = pl1, pl2 = pl2, parede1 = p1, parede2 = p2, pontuacoes = (pn1,pn2), inputs = i}
     where
-      pn1 = sum (fmap contaTruesParede p1) - length c1
-      pn2 = sum (fmap contaTruesParede p2) - length c2
+      pn1 = po1 + sum (fmap contaTruesParede p1) - length c1
+      pn2 = po2 + sum (fmap contaTruesParede p2) - length c2
+
+incrementaCores :: [Cor] -> [Cor] -> [Cor]
+incrementaCores cs [] = cs
+incrementaCores [] cm = cm
+incrementaCores cs cm = cs ++ cm
