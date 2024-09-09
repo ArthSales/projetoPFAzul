@@ -93,19 +93,18 @@ chao = [Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio]
 quebraAzulejo :: a -> Chao
 quebraAzulejo _ = AzulejoQuebrado
 
---Função que atualiza o chão sempre que é recebe a lista de sobra
-atualizaChao :: [Cor] -> [Chao] -> [Chao]
-atualizaChao r ci = map quebraAzulejo (take (length r) ci) ++ drop (length r) ci
-
 -- >>> atualizaChao [Amarelo,Amarelo] [Vazio,Vazio]
 -- [AzulejoQuebrado,AzulejoQuebrado]
 compraPraPatternLine :: [Maybe Cor] -> Int -> Int -> State2 -> State2
 compraPraPatternLine [] _ _ s = s
-compraPraPatternLine compra l i (State2 s e m v c1 c2 pl1 pl2 p1 p2 p inp)
-  | v == 0 = State2 s novoExpo novoCentro 1 (sobra ++ c1) c2 novoPl pl2 p1 p2 p inp
-  | otherwise = State2 s novoExpo novoCentro 0 c1 (sobra ++ c2) pl1 novoPl p1 p2 p inp
+compraPraPatternLine compra l i s0@(State2 s e m v c1 c2 pl1 pl2 p1 p2 p inp)
+  | v == 0 && verificaChaoInsta e pl1 = State2 s novoExpo novoCentro 1 (sobra ++ c1) c2 novoPl pl2 p1 p2 p inp
+  | v == 0 && podeJogadaOuReseta compra linhaSelecionada = State2 s novoExpo novoCentro 1 (sobra ++ c1) c2 novoPl pl2 p1 p2 p inp
+  | v == 1 && podeJogadaOuReseta compra linhaSelecionada = State2 s novoExpo novoCentro 0 c1 (sobra ++ c2) pl1 novoPl p1 p2 p inp
+  | otherwise = s0
   where
     cor = tiraCor $ head compra --pega a cor selecionada na compra e tira do contexto do Maybe
+    linhaSelecionada = pl1 !! i
     tamanhoEscolhida = length (pl1 !! i) --pega tamanho da patternLine escolhida da lista de patternLines
     novoPl | v == 0 = take i pl1 ++ [preencheLista compra (pl1 !! i)] ++ drop (i+1) pl1 --compõe a nova pl com as informações da pl anterior
            | otherwise = take i pl2 ++ [preencheLista compra (pl2 !! i)] ++ drop (i+1) pl2
@@ -118,15 +117,48 @@ compraPraPatternLine compra l i (State2 s e m v c1 c2 pl1 pl2 p1 p2 p inp)
         | x == y    = Just y : preencheLista x1 ys -- Só substitui os próximos valores se o primeiro Just for igual em ambas as listas.
         | otherwise = Just y : ys                  -- Retorna a segunda lista sem alterações se os valores iniciais forem diferentes.
     preencheLista _ ys = ys  -- Para qualquer outro caso, retorna a segunda lista como está.
-
-    sobra = fmap quebraAzulejo (drop tamanhoEscolhida compra)
+    sobra = atualizaChao compra (preencheLista compra (pl2 !! i))
     novoExpo | l == 5 = e
              | otherwise = dropaExpositor e l
     novoCentro | l == 5 = dropaCorDeLsCores cor m
                | otherwise = incrementaCores (restoExpositor cor l e) m
-      --                   then incrementaCores (restoExpositor (last novoJ12) nloja expo) cm2
-      --                   else incrementaCores (restoExpositor (last novoJ22) nloja expo) cm2
+    podeJogadaOuReseta :: Eq a => [Maybe a] -> [Maybe a] -> Bool -- verifica se o jogador pode realizar a jogada desejada
+    podeJogadaOuReseta [] _ = True
+    podeJogadaOuReseta _ [] = True
+    podeJogadaOuReseta (Nothing:_) _ = True
+    podeJogadaOuReseta l@(Just x:xs) (Nothing:ys) | isNothing (last ys) = True
+                                                  | otherwise = podeJogadaOuReseta xs ys
+    podeJogadaOuReseta (Just x:xs) (Just y:ys) = x == y
 
+    verificaChaoInsta :: Eq a => [[a]] -> [[Maybe a]] -> Bool --verifica se pode jogar um azulejo no chao do jogador direto, pois não há mais jogadas
+    verificaChaoInsta [] _ = True
+    verificaChaoInsta _ [] = False
+    verificaChaoInsta (xs:xss) yss =
+        case xs of
+        [] -> False  -- Caso a lista de `a` esteja vazia
+        (x:_) -> any (verificaPrimeiro x) yss && verificaChaoInsta xss yss
+        where
+        verificaPrimeiro :: Eq a => a -> [Maybe a] -> Bool
+        verificaPrimeiro _ [] = False
+        verificaPrimeiro _ (Nothing:_) = False
+        verificaPrimeiro x (Just y:_) = x == y
+
+atualizaChao :: [Maybe Cor] -> [Maybe Cor] -> [Chao]
+atualizaChao [] _ = []
+atualizaChao _ [] = []
+atualizaChao (Nothing:_) _ = []
+atualizaChao c@(Just _:_) p@(Nothing:_) | length c > length p = fmap quebraAzulejo (drop (length p) c)
+                                        | otherwise = fmap quebraAzulejo c
+atualizaChao c@(Just x:xs) p@(Just y:ys) | podeJogar1 && length c > length p = fmap quebraAzulejo (drop (length p - 1) c)
+                                         | otherwise = []
+  where
+    podeJogar :: Eq a => [Maybe a] -> [Maybe a] -> Bool
+    podeJogar [] _ = True
+    podeJogar _ [] = True
+    podeJogar (Nothing:_) _ = True
+    podeJogar (Just x:xs) (Nothing:ys) = True
+    podeJogar (Just x:xs) (Just y:ys) = x == y || podeJogar xs ys
+    podeJogar1 = podeJogar c p
 
 tiraCor :: Maybe Cor -> Cor
 tiraCor (Just c) = c

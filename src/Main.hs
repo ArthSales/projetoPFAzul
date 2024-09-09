@@ -112,3 +112,4 @@ carregaImagens = do
   preto <- loadBMP "src/assets/azulejo_preto.bmp"
   return [(Amarelo, amarelo), (Azul, azul), (Branco, branco), (Vermelho, vermelho), (Preto, preto)]
 
+
