@@ -96,7 +96,7 @@ trocaVez x | x == 0 = 1
 -- render  :: Picture -> State1 -> Picture
 -- render img (State1 saco exp1 cm1 v j11 j21) = tabuleiroLojas img exp1 cm1 j11 j21
 render :: [(Cor, Picture)] -> Picture -> Picture -> State2 -> Picture
-render imagens tabuleiros azulejoQuebrado (State2 _ exp1 cm1 _ c1 c2 pt1 pt2 p1 p2 p _) = tabuleiroLojas imagens tabuleiros azulejoQuebrado exp1 cm1 c1 c2 pt1 pt2 p1 p2 p
+render imagens tabuleiros azulejoQuebrado (State2 _ exp1 cm1 vez c1 c2 pt1 pt2 p1 p2 p _) = tabuleiroLojas imagens tabuleiros azulejoQuebrado exp1 cm1 c1 c2 pt1 pt2 p1 p2 p vez
 
 update :: Float -> State2 -> State2
 update _ state = state
