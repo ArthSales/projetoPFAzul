@@ -3,18 +3,20 @@
 /home/livia/projetoPFAzul/README.md:
   hash: d9d718985c0ba34ac80496db4cdff4e5a51fe360515dd6cac9a5a026c357bb38
 /home/livia/projetoPFAzul/projetoPFAzul.cabal:
-  hash: f79e92478899ad3f7afb65d05a3aa10b652a67b44a9223c3c51f865a1e09c895
+  hash: 07188c9bdaab02d1b17f08a9fe8141b15975876c515d4a81eaf2f8d7ffd414cd
 /home/livia/projetoPFAzul/src/Data1.hs:
-  hash: 9e0ec08ae0f5c90e70a0af7e27733fbbbf4bfda2b8a9089dca3b52021246f077
+  hash: 38943c0ad9118e5275a7daaace279d2747c6454b028098cc010b439bc7050de6
 /home/livia/projetoPFAzul/src/Expositores.hs:
-  hash: 2af94110c018cb86883c89ebd8c4fb4bb9f0784c8d7be05aaa993c7e49c46af8
+  hash: f72efb32107ad2b0b9a9152ed72ac7c3c53b920ed84461d33ce8035b27845c17
 /home/livia/projetoPFAzul/src/Jogador1.hs:
   hash: 467bde1d1d6e0aec6cb5f001531e81281592780d385fb0eddb02f7cc6044221e
 /home/livia/projetoPFAzul/src/Jogo.hs:
-  hash: 7f6584cd1bc68ecd4845505ae9703d92ca0e651fba2bd3253b33597e2a363667
+  hash: 83b940ec94452d21dd37dec3a26c83fb89b61b39e4d4b4cb3d88e29f39ea0ac9
 /home/livia/projetoPFAzul/src/Main.hs:
-  hash: b85603dbc1365f3f12ff363832c4d58ecdfe7758aa8071d827a7de82b13cab2e
+  hash: c3d7220afb6fa987050faf95879b86c98394be53dc344db3d97f766e14c5bd15
 /home/livia/projetoPFAzul/src/Parede.hs:
-  hash: 983ba04ffa0736fe1b65c9d67cce509f4975e913a301f1a875f9f8a5beee505d
+  hash: e8a3128895ed8d6c35590c75b1a735ef324ff5ae150f4f00accf9765102179ff
+/home/livia/projetoPFAzul/src/Rodada.hs:
+  hash: 76210c891494ad861fbbf1da798e3de78b78f8490f7fc3bde363de02b5cc6af3
 /home/livia/projetoPFAzul/src/SacoDeAzulejos.hs:
-  hash: ea1d2f05c5aba2f8b37d81992cfb0df6cb3c42140bbd56655577494d82433271
+  hash: 16e053173d8b017f2324ad393636400eabd8d2da9f2f5137e3cf327d913f7cde

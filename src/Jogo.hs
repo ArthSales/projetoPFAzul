@@ -85,8 +85,13 @@ posicoesAzulejosP1 = posicaoAzulejoInicialP ++
 posicoesAzulejosP2 :: [(Float, Float)]
 posicoesAzulejosP2 = transladar posicoesAzulejosP1 0 (-350)
 
-posicoesJ1 :: [(Float, Float)]
+posicoesChao1 :: [(Float, Float)]
+posicoesChao1 = [(116,55),(161,55),(206,55),(250,55),(295,55),(340,55),(385,55),(430,55)]
 
+posicoesChao2 :: [(Float, Float)]
+posicoesChao2 = transladar posicoesChao1 0 (-350)
+
+posicoesJ1 :: [(Float, Float)]
 posicoesJ1 = [(-540,-300),(-505,-300),(-470,-300),(-435,-300),(-400,-300),(-365,-300),(-330,-300),(-295,-300),
               (-540,-340),(-505,-340),(-470,-340),(-435,-340),(-400,-340),(-365,-340),(-330,-340)]
 
@@ -98,16 +103,21 @@ obtemImagem :: [(Cor, Picture)] -> Cor -> Picture
 obtemImagem imagens cor = case lookup cor imagens of
   Just img -> scale 0.08 0.08 img  -- Aplica um redimensionamento de 50% em ambas as direções
   Nothing -> Blank  -- Caso não encontre a imagem, retorna uma imagem em branco
+
+chaoImagem :: Picture -> [Chao] -> [Picture]
+chaoImagem _ [] = []
+chaoImagem img (_:xs) = img : chaoImagem img xs
   
-tabuleiroLojas :: [(Cor, Picture)] -> Picture -> [[Cor]] -> [Cor] -> [[Maybe Cor]] -> [[Maybe Cor]] -> [LinhaParede] -> [LinhaParede] -> (Int, Int) -> Picture
-tabuleiroLojas tuplas tabuleiros expo cent pt1 pt2 p1 p2 (pont1, pont2)=
+tabuleiroLojas :: [(Cor, Picture)] -> Picture -> Picture -> [[Cor]] -> [Cor] -> [Chao] -> [Chao] -> [[Maybe Cor]] -> [[Maybe Cor]] -> [LinhaParede] -> [LinhaParede] -> (Int, Int) -> Picture
+tabuleiroLojas tuplas tabuleiros azulejoQuebradoImg expo cent ch1 ch2 pt1 pt2 p1 p2 (pont1, pont2)=
   let azulejosExpo = map (map (obtemImagem tuplas)) expo
       azulejosCent = map (obtemImagem tuplas) cent
       azulejosPl1 =  concatMap (picturesPattern tuplas) pt1
       azulejosPl2 = concatMap (picturesPattern tuplas) pt2
       azulejosP1 = concatMap (picturesParede tuplas) p1
       azulejosP2 = concatMap (picturesParede tuplas) p2
-
+      chao1Img = chaoImagem azulejoQuebradoImg ch1
+      chao2Img = chaoImagem azulejoQuebradoImg ch2
       -- azulejosJ1 = map (obtemImagem tuplas) azj1
       -- azulejosJ2 = map (obtemImagem tuplas) azj2
 
@@ -124,12 +134,17 @@ tabuleiroLojas tuplas tabuleiros expo cent pt1 pt2 p1 p2 (pont1, pont2)=
       azulejosTraduzidosPt2 = [translate x y azulejo | ((x, y), azulejo) <- zip posicoesAzulejosPT2 azulejosPl2]
       azulejosTraduzidosP1 = [translate x y (scale 0.95 0.95 azulejo) | ((x, y), azulejo) <- zip posicoesAzulejosP1 azulejosP1]
       azulejosTraduzidosP2 = [translate x y (scale 0.95 0.95 azulejo) | ((x, y), azulejo) <- zip posicoesAzulejosP2 azulejosP2]
+      azulejosTraduzidosC1 = [translate x y (scale 0.08 0.08 azulejo) | ((x, y), azulejo) <- zip posicoesChao1 chao1Img]
+      azulejosTraduzidosC2 = [translate x y (scale 0.08 0.08 azulejo) | ((x, y), azulejo) <- zip posicoesChao2 chao2Img]
 
       -- azulejosTraduzidosJ1 = [translate x y azulejo | ((x, y), azulejo) <- zip posicoesJ1 azulejosJ1]
       -- azulejosTraduzidosJ2 = [translate x y azulejo | ((x, y), azulejo) <- zip posicoesJ2 azulejosJ2]
 
   -- in pictures (textosTraduzidos ++ lojasTraduzidas ++ [centroTraduzido] ++ azulejosTraduzidosExpo ++ azulejosTraduzidosCent ++ azulejosTraduzidosJ1 ++ azulejosTraduzidosJ2 ++ [tabuleiro1] ++ [tabuleiro2])
-   in pictures (textosTraduzidos ++ lojasTraduzidas ++ [centroTraduzido] ++ azulejosTraduzidosExpo ++ azulejosTraduzidosCent ++ [tabuleiro1] ++ [tabuleiro2] ++ azulejosTraduzidosPt1 ++ azulejosTraduzidosPt2 ++ azulejosTraduzidosP1 ++ azulejosTraduzidosP2)
+   in pictures (textosTraduzidos ++ lojasTraduzidas ++ [centroTraduzido] ++ azulejosTraduzidosExpo ++ 
+                azulejosTraduzidosCent ++ [tabuleiro1] ++ [tabuleiro2] ++ azulejosTraduzidosPt1 ++ 
+                azulejosTraduzidosPt2 ++ azulejosTraduzidosP1 ++ azulejosTraduzidosP2 ++ 
+                azulejosTraduzidosC1 ++  azulejosTraduzidosC2)
 
 listaParede :: [(Cor,Picture)] -> (Cor,Bool) -> Picture
 listaParede [] _ = Blank
