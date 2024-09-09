@@ -40,8 +40,24 @@ trataEvento (EventKey (Char c) Down _ _) st@(State2 sa2 expo cm v c1 c2 pl1 pl2 
           | str2 == 'v' = Vermelho
           | str2 == 'z' = Azul
           | otherwise = error "Cor não identificada"
-        novoEstado | nloja == 5 = nextRound (compraPraPatternLine (compraNoContexto $ compraCentroDaMesa cor cm) nloja npl estado)
+        novoEstado | verificaChaoInsta (adicionaLista cm expo) pl1 = quebraUmAzulejo estado
+                   | nloja == 5 = nextRound (compraPraPatternLine (compraNoContexto $ compraCentroDaMesa cor cm) nloja npl estado)
                    | otherwise = nextRound (compraPraPatternLine (compraNoContexto $ compraExpositor cor nloja expo) nloja npl estado)
+        verificaChaoInsta :: Eq a => [[a]] -> [[Maybe a]] -> Bool --verifica se pode jogar um azulejo no chao do jogador direto, pois não há mais jogadas
+        verificaChaoInsta [] _ = True
+        verificaChaoInsta _ [] = False
+        verificaChaoInsta (xs:xss) yss =
+          case xs of
+          [] -> False  -- Caso a lista de `a` esteja vazia
+          (x:_) -> any (verificaPrimeiro x) yss && verificaChaoInsta xss yss
+            where
+            verificaPrimeiro :: Eq a => a -> [Maybe a] -> Bool
+            verificaPrimeiro _ [] = False
+            verificaPrimeiro _ (Nothing:_) = False
+            verificaPrimeiro x (Just y:_) = x == y
+        
+        adicionaLista :: [a] -> [[a]] -> [[a]]
+        adicionaLista novaLista listaDeListas = novaLista : listaDeListas
       --   novoExpo
       --     | nloja == 5 = expo
       --     | otherwise = dropaExpositor expo nloja
@@ -70,6 +86,7 @@ trataEvento (EventKey (Char c) Down _ _) st@(State2 sa2 expo cm v c1 c2 pl1 pl2 
       --    | nloja == 5 && v == 1 = incrementaCores j22 (compraCentroDaMesa cor cm2)
       --    | v == 1 = incrementaCores j22 (compraExpositor cor nloja expo)
       --    | otherwise = j22 --Se não se encaixa em nenhum caso, mantém o valor antigo
+      
 trataEvento _ state = state
 
 trocaVez :: Int -> Int
@@ -115,9 +132,5 @@ carregaImagens = do
   preto <- loadBMP "src/assets/azulejo_preto.bmp"
   return [(Amarelo, amarelo), (Azul, azul), (Branco, branco), (Vermelho, vermelho), (Preto, preto)]
 
-<<<<<<< HEAD
-
-=======
 carregaAzulejosQuebrados :: IO Picture
 carregaAzulejosQuebrados = loadBMP "src/assets/azulejoquebrado.bmp"
->>>>>>> dbe9d67ee796f9d3ef896874019f6c6527303a97

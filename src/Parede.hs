@@ -98,7 +98,6 @@ quebraAzulejo _ = AzulejoQuebrado
 compraPraPatternLine :: [Maybe Cor] -> Int -> Int -> State2 -> State2
 compraPraPatternLine [] _ _ s = s
 compraPraPatternLine compra l i s0@(State2 s e m v c1 c2 pl1 pl2 p1 p2 p inp)
-  | v == 0 && verificaChaoInsta e pl1 = State2 s novoExpo novoCentro 1 (sobra ++ c1) c2 novoPl pl2 p1 p2 p inp
   | v == 0 && podeJogadaOuReseta compra linhaSelecionada = State2 s novoExpo novoCentro 1 (sobra ++ c1) c2 novoPl pl2 p1 p2 p inp
   | v == 1 && podeJogadaOuReseta compra linhaSelecionada = State2 s novoExpo novoCentro 0 c1 (sobra ++ c2) pl1 novoPl p1 p2 p inp
   | otherwise = s0
@@ -108,7 +107,6 @@ compraPraPatternLine compra l i s0@(State2 s e m v c1 c2 pl1 pl2 p1 p2 p inp)
     tamanhoEscolhida = length (pl1 !! i) --pega tamanho da patternLine escolhida da lista de patternLines
     novoPl | v == 0 = take i pl1 ++ [preencheLista compra (pl1 !! i)] ++ drop (i+1) pl1 --compõe a nova pl com as informações da pl anterior
            | otherwise = take i pl2 ++ [preencheLista compra (pl2 !! i)] ++ drop (i+1) pl2
-
     preencheLista :: Eq a => [Maybe a] -> [Maybe a] -> [Maybe a]
     preencheLista [] ys = ys  -- Caso a primeira lista esteja vazia, retorna a segunda lista como está.
     preencheLista _ [] = []   -- Caso a segunda lista esteja vazia, retorna uma lista vazia.
@@ -126,22 +124,9 @@ compraPraPatternLine compra l i s0@(State2 s e m v c1 c2 pl1 pl2 p1 p2 p inp)
     podeJogadaOuReseta [] _ = True
     podeJogadaOuReseta _ [] = True
     podeJogadaOuReseta (Nothing:_) _ = True
-    podeJogadaOuReseta l@(Just x:xs) (Nothing:ys) | isNothing (last ys) = True
-                                                  | otherwise = podeJogadaOuReseta xs ys
+    podeJogadaOuReseta l@(Just x:xs) (Nothing:ys) = True
     podeJogadaOuReseta (Just x:xs) (Just y:ys) = x == y
-
-    verificaChaoInsta :: Eq a => [[a]] -> [[Maybe a]] -> Bool --verifica se pode jogar um azulejo no chao do jogador direto, pois não há mais jogadas
-    verificaChaoInsta [] _ = True
-    verificaChaoInsta _ [] = False
-    verificaChaoInsta (xs:xss) yss =
-        case xs of
-        [] -> False  -- Caso a lista de `a` esteja vazia
-        (x:_) -> any (verificaPrimeiro x) yss && verificaChaoInsta xss yss
-        where
-        verificaPrimeiro :: Eq a => a -> [Maybe a] -> Bool
-        verificaPrimeiro _ [] = False
-        verificaPrimeiro _ (Nothing:_) = False
-        verificaPrimeiro x (Just y:_) = x == y
+    
 
 atualizaChao :: [Maybe Cor] -> [Maybe Cor] -> [Chao]
 atualizaChao [] _ = []
@@ -159,6 +144,10 @@ atualizaChao c@(Just x:xs) p@(Just y:ys) | podeJogar1 && length c > length p = f
     podeJogar (Just x:xs) (Nothing:ys) = True
     podeJogar (Just x:xs) (Just y:ys) = x == y || podeJogar xs ys
     podeJogar1 = podeJogar c p
+
+quebraUmAzulejo :: State2 -> State2
+quebraUmAzulejo (State2 s e m v c1 c2 pl1 pl2 p1 p2 p inp) | v == 0 = State2 s e (tail m) v (AzulejoQuebrado:c1) c2 pl1 pl2 p1 p2 p inp
+                                                           | otherwise = State2 s e (tail m) v c1 (AzulejoQuebrado:c2) pl1 pl2 p1 p2 p inp
 
 tiraCor :: Maybe Cor -> Cor
 tiraCor (Just c) = c
