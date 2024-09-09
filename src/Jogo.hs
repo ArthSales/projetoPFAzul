@@ -43,7 +43,7 @@ posicoesLojas = [(0,100),(-350,-150),(-50,-150),(-400,100),(-200,220)]
 posicoesTextos :: [(Float, Float)]
 posicoesTextos = [(-250, 300), (-70, 165), (-20, -70), (-400, -70),
                   (-470, 165), (-210,90), (-540, -260), (-200, -260),
-                  (542,325), (542,-25)]
+                  (542,325), (542,-25), (-600,330)]
 
 posicaoAzulejoInicial :: [(Float, Float)]
 posicaoAzulejoInicial = [(-225,245),(-170,245),(-225,195),(-170,195)]
@@ -108,8 +108,8 @@ chaoImagem :: Picture -> [Chao] -> [Picture]
 chaoImagem _ [] = []
 chaoImagem img (_:xs) = img : chaoImagem img xs
   
-tabuleiroLojas :: [(Cor, Picture)] -> Picture -> Picture -> [[Cor]] -> [Cor] -> [Chao] -> [Chao] -> [[Maybe Cor]] -> [[Maybe Cor]] -> [LinhaParede] -> [LinhaParede] -> (Int, Int) -> Picture
-tabuleiroLojas tuplas tabuleiros azulejoQuebradoImg expo cent ch1 ch2 pt1 pt2 p1 p2 (pont1, pont2)=
+tabuleiroLojas :: [(Cor, Picture)] -> Picture -> Picture -> [[Cor]] -> [Cor] -> [Chao] -> [Chao] -> [[Maybe Cor]] -> [[Maybe Cor]] -> [LinhaParede] -> [LinhaParede] -> (Int, Int) -> Int -> Picture
+tabuleiroLojas tuplas tabuleiros azulejoQuebradoImg expo cent ch1 ch2 pt1 pt2 p1 p2 (pont1, pont2) vez=
   let azulejosExpo = map (map (obtemImagem tuplas)) expo
       azulejosCent = map (obtemImagem tuplas) cent
       azulejosPl1 =  concatMap (picturesPattern tuplas) pt1
@@ -122,7 +122,8 @@ tabuleiroLojas tuplas tabuleiros azulejoQuebradoImg expo cent ch1 ch2 pt1 pt2 p1
       -- azulejosJ2 = map (obtemImagem tuplas) azj2
 
       -- Combina as transformações
-      textosCompl = textos ++ [show pont1] ++ [show pont2]
+      textoVez = "Vez: Jogador " ++ show  (vez+1)
+      textosCompl = textos ++ [show pont1] ++ [show pont2] ++ [textoVez]
       textosTraduzidos = [translate x y (scale 0.2 0.2 (text num)) | ((x , y) , num) <- zip posicoesTextos textosCompl]
       lojasTraduzidas = [translate x y loja | (x, y) <- posicoesLojas]
       centroTraduzido = translate (-200) 0 centro
