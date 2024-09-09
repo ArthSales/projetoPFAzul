@@ -78,8 +78,8 @@ trocaVez x | x == 0 = 1
 
 -- render  :: Picture -> State1 -> Picture
 -- render img (State1 saco exp1 cm1 v j11 j21) = tabuleiroLojas img exp1 cm1 j11 j21
-render :: [(Cor, Picture)] -> Picture -> State2 -> Picture
-render imagens tabuleiros (State2 _ exp1 cm1 _ c1 c2 pt1 pt2 p1 p2 p _) = tabuleiroLojas imagens tabuleiros exp1 cm1 pt1 pt2 p1 p2 p
+render :: [(Cor, Picture)] -> Picture -> Picture -> State2 -> Picture
+render imagens tabuleiros azulejoQuebrado (State2 _ exp1 cm1 _ c1 c2 pt1 pt2 p1 p2 p _) = tabuleiroLojas imagens tabuleiros azulejoQuebrado exp1 cm1 c1 c2 pt1 pt2 p1 p2 p
 
 update :: Float -> State2 -> State2
 update _ state = state
@@ -90,15 +90,18 @@ main = do
   let sacoInicial = sacoAzulejos []
       expoInicial = geraExpositores (azulejosParaNum sacoInicial 0) 20
       vez = 0
+
   imagens <- carregaImagens
   tabuleiro <- loadBMP "src/assets/tabuleiro.bmp"
-  let estadoInicial = State2 sacoInicial expoInicial [] vez [] [] (criarPatternLines 5) (criarPatternLines 5) criarParede criarParede (0, 0) []
+  azulejoQuebrado <- loadBMP "src/assets/azulejoquebrado.bmp"
+
+  let initState = State2 sacoInicial expoInicial [] vez [] [] (criarPatternLines 5) (criarPatternLines 5) criarParede criarParede (0, 0) []
   play
     (InWindow "Azul in Haskell" (1280, 720) (10, 10))  -- Cria uma janela
     (makeColorI 105 105 105 255)                       -- Cor de fundo
     30                                                 -- Número de frames por segundo
-    estadoInicial                                      -- Estado inicial
-    (render imagens tabuleiro)                                            -- Função para desenhar o estado
+    initState                                      -- Estado inicial
+    (render imagens tabuleiro azulejoQuebrado)                                            -- Função para desenhar o estado
     trataEvento                                        -- Função para lidar com eventos
     update
 
@@ -112,4 +115,9 @@ carregaImagens = do
   preto <- loadBMP "src/assets/azulejo_preto.bmp"
   return [(Amarelo, amarelo), (Azul, azul), (Branco, branco), (Vermelho, vermelho), (Preto, preto)]
 
+<<<<<<< HEAD
 
+=======
+carregaAzulejosQuebrados :: IO Picture
+carregaAzulejosQuebrados = loadBMP "src/assets/azulejoquebrado.bmp"
+>>>>>>> dbe9d67ee796f9d3ef896874019f6c6527303a97
