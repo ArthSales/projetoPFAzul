@@ -1,9 +1,5 @@
 module Data1 where
 
-import Graphics.Gloss
-import Control.Monad
-
-
 -- Definindo as cores
 data Cor = Amarelo | Azul | Branco | Vermelho | Preto deriving (Show, Enum, Bounded, Eq)
 data Chao = Vazio | AzulejoQuebrado deriving (Show, Enum, Bounded, Eq)

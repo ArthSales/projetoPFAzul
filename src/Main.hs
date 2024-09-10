@@ -5,19 +5,17 @@ module Main (main, Azulejos) where
 import SacoDeAzulejos ( azulejosParaNum, sacoAzulejos )
 import Expositores
 import Parede
-import Rodada
-import Jogador1
+import Rodada ( nextRound )
 import Data1
 import Jogo
 import Graphics.Gloss
 import Graphics.Gloss.Interface.Pure.Game
     ( Key(Char), KeyState(Down), Event(EventKey) )
-import System.Random (RandomGen(next))
 import Data.Char (digitToInt)
 
 
 trataEvento :: Event -> State2 -> State2
-trataEvento (EventKey (Char c) Down _ _) st@(State2 sa2 expo cm v c1 c2 pl1 pl2 p1 p2 p i)
+trataEvento (EventKey (Char c) Down _ _) st@(State2 _ expo centroMesa _ _ _ _ _ _ _ _ i)
   | length newInputs == 3 = processarInputs newInputs st { inputs = [] }
   | otherwise = st { inputs = newInputs }
   where
@@ -40,7 +38,7 @@ trataEvento (EventKey (Char c) Down _ _) st@(State2 sa2 expo cm v c1 c2 pl1 pl2 
           | str2 == 'v' = Vermelho
           | str2 == 'z' = Azul
           | otherwise = error "Cor não identificada"
-        novoEstado | nloja == 5 = nextRound (compraPraPatternLine (compraNoContexto $ compraCentroDaMesa cor cm) nloja npl estado)
+        novoEstado | nloja == 5 = nextRound (compraPraPatternLine (compraNoContexto $ compraCentroDaMesa cor centroMesa) nloja npl estado)
                    | otherwise = nextRound (compraPraPatternLine (compraNoContexto $ compraExpositor cor nloja expo) nloja npl estado)
       --   novoExpo
       --     | nloja == 5 = expo
@@ -72,9 +70,9 @@ trataEvento (EventKey (Char c) Down _ _) st@(State2 sa2 expo cm v c1 c2 pl1 pl2 
       --    | otherwise = j22 --Se não se encaixa em nenhum caso, mantém o valor antigo
 trataEvento _ state = state
 
-trocaVez :: Int -> Int
-trocaVez x | x == 0 = 1
-           | otherwise = 0
+-- trocaVez :: Int -> Int
+-- trocaVez x | x == 0 = 1
+--            | otherwise = 0
 
 -- render  :: Picture -> State1 -> Picture
 -- render img (State1 saco exp1 cm1 v j11 j21) = tabuleiroLojas img exp1 cm1 j11 j21
@@ -114,6 +112,3 @@ carregaImagens = do
   vermelho <- loadBMP "src/assets/azulejo_vermelho.bmp"
   preto <- loadBMP "src/assets/azulejo_preto.bmp"
   return [(Amarelo, amarelo), (Azul, azul), (Branco, branco), (Vermelho, vermelho), (Preto, preto)]
-
-carregaAzulejosQuebrados :: IO Picture
-carregaAzulejosQuebrados = loadBMP "src/assets/azulejoquebrado.bmp"
