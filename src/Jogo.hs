@@ -1,18 +1,12 @@
 module Jogo where
-import Data.Maybe
-import Data.Char
-import Parede
 import Graphics.Gloss
-import Graphics.Gloss.Data.Picture
-import Graphics.Gloss.Interface.Pure.Game
 import Data1
-import SacoDeAzulejos (azulejosParaNum)
-
+import Data.Maybe (isNothing)
 loja :: Picture
 loja = color (makeColorI 110 53 7 255) (circleSolid 80)
 
 centro :: Picture
-centro = circle 120
+centro = circle 125
 
 -- recebe uma lista com as posições de cada azulejo dentro dos expositores e uma lista com os quadrados da cor de cada
 -- azulejo dentro dos expositores, transformando em uma lista de triplas com as posções x e y e os quadrados
@@ -38,15 +32,16 @@ textos = ["1", "2", "3", "4", "5", "6", "Jogador 1", "Jogador 2"]
 
 -- as proximas funções definem as posições dos objetos
 posicoesLojas :: [(Float, Float)]
-posicoesLojas = [(0,100),(-350,-150),(-50,-150),(-400,100),(-200,220)]
+posicoesLojas = [(-70,70),(-420,-180),(-120,-180),(-470,70),(-270,190)]
 
 posicoesTextos :: [(Float, Float)]
-posicoesTextos = [(-250, 300), (-70, 165), (-20, -70), (-400, -70),
-                  (-470, 165), (-210,90), (-540, -260), (-200, -260),
-                  (542,325), (542,-25), (-600,330)]
+posicoesTextos = [(-320, 270), (-140, 135), (-90, -100), (-470, -100), (-540, 135), (-280,60), --numeros das lojas
+                  (100, 325), (100, -25), --jogadores
+                  (380,325), (380,-25), --pontuação
+                  (-600,330)] --vez
 
 posicaoAzulejoInicial :: [(Float, Float)]
-posicaoAzulejoInicial = [(-225,245),(-170,245),(-225,195),(-170,195)]
+posicaoAzulejoInicial = [(-295,215),(-240,215),(-295,165),(-240,165)]
 
 posicoesAzulejos :: [[(Float, Float)]]
 posicoesAzulejos = [posicaoAzulejoInicial,
@@ -57,10 +52,10 @@ posicoesAzulejos = [posicaoAzulejoInicial,
                     ]
 
 posicoesAzulejosCentro :: [(Float, Float)]
-posicoesAzulejosCentro = [(-270,60),(-230,60),(-190,60),(-150,60),
-                    (-270,10),(-230,10),(-190,10),(-150,10),
-                    (-270,-40),(-230,-40),(-190,-40),(-150,-40),
-                    (-255,-90),(-215,-90),(-175,-90)]
+posicoesAzulejosCentro = [(-335,30)  ,(-290,30)  ,(-245,30)  ,(-200,30) ,
+                          (-360,-20) ,(-315,-20) ,(-270,-20) ,(-225,-20), (-180,-20),
+                          (-335,-70) ,(-290,-70) ,(-245,-70) ,(-200,-70),
+                          (-290,-120),(-245,-120)]
 
 posicoesAzulejosPT1 :: [(Float, Float)]
 posicoesAzulejosPT1 = [(295,289),
@@ -91,18 +86,10 @@ posicoesChao1 = [(116,55),(161,55),(206,55),(250,55),(295,55),(340,55),(385,55),
 posicoesChao2 :: [(Float, Float)]
 posicoesChao2 = transladar posicoesChao1 0 (-350)
 
-posicoesJ1 :: [(Float, Float)]
-posicoesJ1 = [(-540,-300),(-505,-300),(-470,-300),(-435,-300),(-400,-300),(-365,-300),(-330,-300),(-295,-300),
-              (-540,-340),(-505,-340),(-470,-340),(-435,-340),(-400,-340),(-365,-340),(-330,-340)]
-
-posicoesJ2 :: [(Float, Float)]
-posicoesJ2 = transladar posicoesJ1 340 0
-
--- Função que retorna a imagem da cor correspondente
 obtemImagem :: [(Cor, Picture)] -> Cor -> Picture
 obtemImagem imagens cor = case lookup cor imagens of
-  Just img -> scale 0.08 0.08 img  -- Aplica um redimensionamento de 50% em ambas as direções
-  Nothing -> Blank  -- Caso não encontre a imagem, retorna uma imagem em branco
+  Just img -> scale 0.08 0.08 img
+  Nothing -> Blank
 
 chaoImagem :: Picture -> [Chao] -> [Picture]
 chaoImagem _ [] = []
@@ -118,17 +105,15 @@ tabuleiroLojas tuplas tabuleiros azulejoQuebradoImg expo cent ch1 ch2 pt1 pt2 p1
       azulejosP2 = concatMap (picturesParede tuplas) p2
       chao1Img = chaoImagem azulejoQuebradoImg ch1
       chao2Img = chaoImagem azulejoQuebradoImg ch2
-      -- azulejosJ1 = map (obtemImagem tuplas) azj1
-      -- azulejosJ2 = map (obtemImagem tuplas) azj2
-
-      -- Combina as transformações
+      
       textoVez = "Vez: Jogador " ++ show  (vez+1)
-      textosCompl = textos ++ [show pont1] ++ [show pont2] ++ [textoVez]
+      textoPont = "Pontuacao: "
+      textosCompl = textos ++ [textoPont ++ show pont1] ++ [textoPont ++ show pont2] ++ [textoVez]
       textosTraduzidos = [translate x y (scale 0.2 0.2 (text num)) | ((x , y) , num) <- zip posicoesTextos textosCompl]
       lojasTraduzidas = [translate x y loja | (x, y) <- posicoesLojas]
-      centroTraduzido = translate (-200) 0 centro
-      tabuleiro1 = translate 330 200 (scale 0.4 0.4 tabuleiros)
-      tabuleiro2 = translate 330 (-150) (scale 0.4 0.4 tabuleiros)
+      centroTraduzido = translate (-270) (-30) centro
+      tabuleiro1 = translate 319 200 (scale 0.4 0.4 tabuleiros)
+      tabuleiro2 = translate 319 (-150) (scale 0.4 0.4 tabuleiros)
       azulejosTraduzidosExpo = [translate x y azulejo | (x, y, azulejo) <- juntaPosicoesCores posicoesAzulejos azulejosExpo]
       azulejosTraduzidosCent = [translate x y azulejo | ((x, y), azulejo) <- zip posicoesAzulejosCentro azulejosCent]
       azulejosTraduzidosPt1 = [translate x y azulejo | ((x, y), azulejo) <- zip posicoesAzulejosPT1 azulejosPl1]
@@ -138,10 +123,6 @@ tabuleiroLojas tuplas tabuleiros azulejoQuebradoImg expo cent ch1 ch2 pt1 pt2 p1
       azulejosTraduzidosC1 = [translate x y (scale 0.08 0.08 azulejo) | ((x, y), azulejo) <- zip posicoesChao1 chao1Img]
       azulejosTraduzidosC2 = [translate x y (scale 0.08 0.08 azulejo) | ((x, y), azulejo) <- zip posicoesChao2 chao2Img]
 
-      -- azulejosTraduzidosJ1 = [translate x y azulejo | ((x, y), azulejo) <- zip posicoesJ1 azulejosJ1]
-      -- azulejosTraduzidosJ2 = [translate x y azulejo | ((x, y), azulejo) <- zip posicoesJ2 azulejosJ2]
-
-  -- in pictures (textosTraduzidos ++ lojasTraduzidas ++ [centroTraduzido] ++ azulejosTraduzidosExpo ++ azulejosTraduzidosCent ++ azulejosTraduzidosJ1 ++ azulejosTraduzidosJ2 ++ [tabuleiro1] ++ [tabuleiro2])
    in pictures (textosTraduzidos ++ lojasTraduzidas ++ [centroTraduzido] ++ azulejosTraduzidosExpo ++ 
                 azulejosTraduzidosCent ++ [tabuleiro1] ++ [tabuleiro2] ++ azulejosTraduzidosPt1 ++ 
                 azulejosTraduzidosPt2 ++ azulejosTraduzidosP1 ++ azulejosTraduzidosP2 ++ 
@@ -149,7 +130,7 @@ tabuleiroLojas tuplas tabuleiros azulejoQuebradoImg expo cent ch1 ch2 pt1 pt2 p1
 
 listaParede :: [(Cor,Picture)] -> (Cor,Bool) -> Picture
 listaParede [] _ = Blank
-listaParede _ (_,False) = Blank
+listaParede  _ (_,False) = Blank
 listaParede imagens (c,True) = case lookup c imagens of
   Just img -> scale 0.08 0.08 img 
   Nothing -> Blank
@@ -180,7 +161,8 @@ picturesParede :: [(Cor, Picture)] -> LinhaParede -> [Picture]
 picturesParede _ [] = []
 picturesParede imagens (x:xs) = listaParede imagens x : picturesParede imagens xs
 
---REGRAS
+--Regras
+
 jogadaPossivel :: [Cor] -> [Maybe Cor] -> Bool
 jogadaPossivel [] _ = False
 jogadaPossivel _ [] = False
@@ -188,19 +170,9 @@ jogadaPossivel l@(x:xs) l2@(Just y:ys) = (x == y && any isNothing l2) || jogadaP
 jogadaPossivel _ ys = any isNothing ys
 
 naoHaJogadasPossiveis :: [[Cor]] -> [[Maybe Cor]] -> Bool
-naoHaJogadasPossiveis [] _ = False
+naoHaJogadasPossiveis [] _  = False
 naoHaJogadasPossiveis _ [] = False
 naoHaJogadasPossiveis (x:xs) l2@(y:ys) = any (jogadaPossivel x) l2 || naoHaJogadasPossiveis xs l2
 
--- >>> jogadaPossivel [Amarelo,Azul,Vermelho,Branco] [Nothing, Nothing, Nothing, Nothing]
--- True
-
--- >>> any (jogadaPossivel [Amarelo,Azul,Vermelho]) [[Nothing, Nothing, Nothing],[Just Preto, Nothing, Nothing, Nothing]]
--- True
-
-
--- >>> naoHaJogadasPossiveis [[Amarelo,Azul,Vermelho,Branco],[Branco]] [[Nothing, Nothing, Nothing],[Just Branco, Nothing, Nothing, Nothing]]
--- True
-
--- haJogadaPossivel :: [[Cor]] -> [[Maybe Cor]] -> Bool
--- haJogadaPossivel
+adicionaLista :: [a] -> [[a]] -> [[a]]
+adicionaLista novaLista listaDeListas = novaLista : listaDeListas

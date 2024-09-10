@@ -97,16 +97,16 @@ quebraAzulejo _ = AzulejoQuebrado
 -- [AzulejoQuebrado,AzulejoQuebrado]
 compraPraPatternLine :: [Maybe Cor] -> Int -> Int -> State2 -> State2
 compraPraPatternLine [] _ _ s = s
-compraPraPatternLine compra l i s0@(State2 s e m v c1 c2 pl1 pl2 p1 p2 p inp)
-  | v == 0 && podeJogadaOuReseta compra linhaSelecionada = State2 s novoExpo novoCentro 1 (sobra ++ c1) c2 novoPl pl2 p1 p2 p inp
-  | v == 1 && podeJogadaOuReseta compra linhaSelecionada = State2 s novoExpo novoCentro 0 c1 (sobra ++ c2) pl1 novoPl p1 p2 p inp
+compraPraPatternLine compra l i s0@(State2 s e m v c1 c2 pl11 pl22 p1 p2 p inp)
+  | v == 0 && podeJogadaOuReseta compra linhaSelecionada = State2 s novoExpo novoCentro 1 (sobra ++ c1) c2 novoPl pl22 p1 p2 p inp
+  | v == 1 && podeJogadaOuReseta compra linhaSelecionada = State2 s novoExpo novoCentro 0 c1 (sobra ++ c2) pl11 novoPl p1 p2 p inp
   | otherwise = s0
   where
     cor = tiraCor $ head compra --pega a cor selecionada na compra e tira do contexto do Maybe
-    linhaSelecionada = pl1 !! i
-    tamanhoEscolhida = length (pl1 !! i) --pega tamanho da patternLine escolhida da lista de patternLines
-    novoPl | v == 0 = take i pl1 ++ [preencheLista compra (pl1 !! i)] ++ drop (i+1) pl1 --compõe a nova pl com as informações da pl anterior
-           | otherwise = take i pl2 ++ [preencheLista compra (pl2 !! i)] ++ drop (i+1) pl2
+    linhaSelecionada = pl11 !! i
+    tamanhoEscolhida = length (pl11 !! i) --pega tamanho da patternLine escolhida da lista de patternLines
+    novoPl | v == 0 = take i pl11 ++ [preencheLista compra (pl11 !! i)] ++ drop (i+1) pl11 --compõe a nova pl com as informações da pl anterior
+           | otherwise = take i pl22 ++ [preencheLista compra (pl22 !! i)] ++ drop (i+1) pl22
     preencheLista :: Eq a => [Maybe a] -> [Maybe a] -> [Maybe a]
     preencheLista [] ys = ys  -- Caso a primeira lista esteja vazia, retorna a segunda lista como está.
     preencheLista _ [] = []   -- Caso a segunda lista esteja vazia, retorna uma lista vazia.
@@ -115,8 +115,8 @@ compraPraPatternLine compra l i s0@(State2 s e m v c1 c2 pl1 pl2 p1 p2 p inp)
         | x == y    = Just y : preencheLista x1 ys -- Só substitui os próximos valores se o primeiro Just for igual em ambas as listas.
         | otherwise = Just y : ys                  -- Retorna a segunda lista sem alterações se os valores iniciais forem diferentes.
     preencheLista _ ys = ys  -- Para qualquer outro caso, retorna a segunda lista como está.
-    sobra | v == 0 = atualizaChao compra (preencheLista compra (pl1 !! i))
-          | otherwise = atualizaChao compra (preencheLista compra (pl2 !! i))
+    sobra | v == 0 = atualizaChao compra (preencheLista compra (pl11 !! i))
+          | otherwise = atualizaChao compra (preencheLista compra (pl22 !! i))
     novoExpo | l == 5 = e
              | otherwise = dropaExpositor e l
     novoCentro | l == 5 = dropaCorDeLsCores cor m
