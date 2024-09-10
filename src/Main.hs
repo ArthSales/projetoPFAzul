@@ -5,7 +5,7 @@ module Main (main, Azulejos) where
 import SacoDeAzulejos ( azulejosParaNum, sacoAzulejos )
 import Expositores
 import Parede
-import Rodada ( nextRound )
+import Rodada ( nextRound, gameOver )
 import Data1
 import Jogo
 import Graphics.Gloss
@@ -15,7 +15,7 @@ import Data.Char (digitToInt)
 
 
 trataEvento :: Event -> State2 -> State2
-trataEvento (EventKey (Char c) Down _ _) st@(State2 _ expo cm v _ _ pl1 pl2 _ _ _ i)
+trataEvento (EventKey (Char c) Down _ _) st@(State2 _ expo cm v _ _ pl1 pl2 p1 p2 _ i)
   | length newInputs == 3 = processarInputs newInputs st { inputs = [] }
   | otherwise = st { inputs = newInputs }
   where
@@ -40,8 +40,8 @@ trataEvento (EventKey (Char c) Down _ _) st@(State2 _ expo cm v _ _ pl1 pl2 _ _ 
           | otherwise = error "Cor não identificada"
         novoEstado | v == 0 && not (naoHaJogadasPossiveis (adicionaLista cm expo) pl1) = nextRound (quebraUmAzulejo estado)
                    | v == 1 && not (naoHaJogadasPossiveis (adicionaLista cm expo) pl2) = nextRound (quebraUmAzulejo estado)
-                   | nloja == 5 = nextRound (compraPraPatternLine (compraNoContexto $ compraCentroDaMesa cor cm) nloja npl estado)
-                   | otherwise = nextRound (compraPraPatternLine (compraNoContexto $ compraExpositor cor nloja expo) nloja npl estado)
+                   | nloja == 5 = gameOver (nextRound (compraPraPatternLine (compraNoContexto $ compraCentroDaMesa cor cm) nloja npl estado))
+                   | otherwise = gameOver (nextRound (compraPraPatternLine (compraNoContexto $ compraExpositor cor nloja expo) nloja npl estado))
       --   novoExpo
       --     | nloja == 5 = expo
       --     | otherwise = dropaExpositor expo nloja

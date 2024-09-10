@@ -55,20 +55,31 @@ nextRound s0@(State2 s e m v ch1 ch2 pl1 pl2 p1 p2 p i)
                                 chao1 = ch1, 
                                 chao2 = ch2, 
                                 pl1 = novaPattern1, 
-                                pl2 = novaPattern2, 
+                                pl2 = novaPattern2,
                                 parede1 = novaParede1,
                                 parede2 = novaParede2,
                                 pontuacoes = p,
                                 inputs = [] })
+  | null s = resetaSaco
   | otherwise = s0
   where
+    resetaSaco = State2 (sacoAzulejos []) novoExpoReset m 0 ch1 ch2 pl1 pl2 p1 p2 p []
+    novoExpoReset = geraExpositores (azulejosParaNum (sacoAzulejos []) 0) 20
     novosExpositores = geraExpositores (azulejosParaNum (sacoAzulejos s) 0) 20
     novoSaco = retiraExpositores novosExpositores s
     (novaParede1, novaPattern1) = atualizarMatriz p1 pl1
     (novaParede2, novaPattern2) = atualizarMatriz p2 pl2
 
-estadoInicial :: State2
-estadoInicial = State2 (sacoAzulejos []) [] [] 0 [] [] [] [] [] [] (0,0) []
--- >>> v = State2 [(19,Azul),(14,Amarelo),(15,Vermelho),(18,Preto),(14,Branco)] [[Branco,Preto,Amarelo,Vermelho],[Branco,Preto,Amarelo,Vermelho],[Branco,Branco,Amarelo,Vermelho],[Azul,Branco,Amarelo,Vermelho],[Amarelo,Branco,Amarelo,Vermelho]] [] 0 [] [] [] [] [] [] (0,0)
--- >>> nextRound v
--- State2 {sa1 = [(19,Azul),(14,Amarelo),(15,Vermelho),(18,Preto),(14,Branco)], expositores1 = [[Branco,Preto,Amarelo,Vermelho],[Branco,Preto,Amarelo,Vermelho],[Branco,Branco,Amarelo,Vermelho],[Azul,Branco,Amarelo,Vermelho],[Amarelo,Branco,Amarelo,Vermelho]], cm1 = [], deQuemEAVez1 = 0, chao1 = [], chao2 = [], pl1 = [], pl2 = [], parede1 = [], parede2 = [], pontuacoes = (0,0)}
+gameOver :: State2 -> State2
+gameOver s0@(State2 s e m v ch1 ch2 pl1 pl2 p1 p2 p i) | verificaGameOver p1 || verificaGameOver p2 = State2 [] [] [] 0 [] [] [] [] [] [] (0,0) []
+                                                       | otherwise = s0
+
+verificaGameOver :: [[(Cor,Bool)]] -> Bool
+verificaGameOver [] = False
+verificaGameOver (x:xs) = all true x || verificaGameOver xs
+      where
+        true :: (Cor,Bool) -> Bool
+        true (_,b) = b
+
+-- >>> verificaGameOver [[(Azul,False),(Azul,True),(Azul,True)],[(Azul,False),(Azul,True),(Azul,True)],[(Azul,True),(Azul,True),(Azul,True)]]
+-- True

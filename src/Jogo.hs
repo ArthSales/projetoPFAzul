@@ -94,7 +94,7 @@ obtemImagem imagens cor = case lookup cor imagens of
 chaoImagem :: Picture -> [Chao] -> [Picture]
 chaoImagem _ [] = []
 chaoImagem img (_:xs) = img : chaoImagem img xs
-  
+
 tabuleiroLojas :: [(Cor, Picture)] -> Picture -> Picture -> [[Cor]] -> [Cor] -> [Chao] -> [Chao] -> [[Maybe Cor]] -> [[Maybe Cor]] -> [LinhaParede] -> [LinhaParede] -> (Int, Int) -> Int -> Picture
 tabuleiroLojas tuplas tabuleiros azulejoQuebradoImg expo cent ch1 ch2 pt1 pt2 p1 p2 (pont1, pont2) vez=
   let azulejosExpo = map (map (obtemImagem tuplas)) expo
@@ -105,7 +105,7 @@ tabuleiroLojas tuplas tabuleiros azulejoQuebradoImg expo cent ch1 ch2 pt1 pt2 p1
       azulejosP2 = concatMap (picturesParede tuplas) p2
       chao1Img = chaoImagem azulejoQuebradoImg ch1
       chao2Img = chaoImagem azulejoQuebradoImg ch2
-      
+
       textoVez = "Vez: Jogador " ++ show  (vez+1)
       textoPont = "Pontuacao: "
       textosCompl = textos ++ [textoPont ++ show pont1] ++ [textoPont ++ show pont2] ++ [textoVez]
@@ -123,31 +123,31 @@ tabuleiroLojas tuplas tabuleiros azulejoQuebradoImg expo cent ch1 ch2 pt1 pt2 p1
       azulejosTraduzidosC1 = [translate x y (scale 0.08 0.08 azulejo) | ((x, y), azulejo) <- zip posicoesChao1 chao1Img]
       azulejosTraduzidosC2 = [translate x y (scale 0.08 0.08 azulejo) | ((x, y), azulejo) <- zip posicoesChao2 chao2Img]
 
-   in pictures (textosTraduzidos ++ lojasTraduzidas ++ [centroTraduzido] ++ azulejosTraduzidosExpo ++ 
-                azulejosTraduzidosCent ++ [tabuleiro1] ++ [tabuleiro2] ++ azulejosTraduzidosPt1 ++ 
-                azulejosTraduzidosPt2 ++ azulejosTraduzidosP1 ++ azulejosTraduzidosP2 ++ 
+   in pictures (textosTraduzidos ++ lojasTraduzidas ++ [centroTraduzido] ++ azulejosTraduzidosExpo ++
+                azulejosTraduzidosCent ++ [tabuleiro1] ++ [tabuleiro2] ++ azulejosTraduzidosPt1 ++
+                azulejosTraduzidosPt2 ++ azulejosTraduzidosP1 ++ azulejosTraduzidosP2 ++
                 azulejosTraduzidosC1 ++  azulejosTraduzidosC2)
 
 listaParede :: [(Cor,Picture)] -> (Cor,Bool) -> Picture
 listaParede [] _ = Blank
 listaParede  _ (_,False) = Blank
 listaParede imagens (c,True) = case lookup c imagens of
-  Just img -> scale 0.08 0.08 img 
+  Just img -> scale 0.08 0.08 img
   Nothing -> Blank
 
 
 listaPattern :: [(Cor, Picture)] -> Maybe Cor -> Picture
 listaPattern imagens cor = case lookup cor imagensContexto of
   Just img -> scale 0.08 0.08 img
-  Nothing -> Blank 
+  Nothing -> Blank
   where
     imagensContexto = maybeCor imagens
     maybeCor :: [(Cor, Picture)] -> [(Maybe Cor, Picture)]
     maybeCor [] = []
-    maybeCor ((x,y):xs) = (Just x, y) : maybeCor xs 
+    maybeCor ((x,y):xs) = (Just x, y) : maybeCor xs
 
 patterns :: [[Maybe Cor]]
-patterns = [[Nothing], 
+patterns = [[Nothing],
             [Just Azul, Just Azul],
             [Just Azul, Just Azul, Just Azul],
             [Just Azul, Just Azul, Just Azul, Just Azul],
@@ -161,7 +161,7 @@ picturesParede :: [(Cor, Picture)] -> LinhaParede -> [Picture]
 picturesParede _ [] = []
 picturesParede imagens (x:xs) = listaParede imagens x : picturesParede imagens xs
 
---Regras
+--REGRAS DE FUNCIONAMENTO DO JOGO
 
 jogadaPossivel :: [Cor] -> [Maybe Cor] -> Bool
 jogadaPossivel [] _ = False
@@ -176,3 +176,8 @@ naoHaJogadasPossiveis (x:xs) l2@(y:ys) = any (jogadaPossivel x) l2 || naoHaJogad
 
 adicionaLista :: [a] -> [[a]] -> [[a]]
 adicionaLista novaLista listaDeListas = novaLista : listaDeListas
+
+jogadaPossivelParede :: Cor -> [(Cor,Bool)] -> Bool
+jogadaPossivelParede x [] = False
+jogadaPossivelParede x ((c,b):cs) | x == c && not b = True
+                                  | otherwise = jogadaPossivelParede x cs
