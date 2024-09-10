@@ -179,3 +179,28 @@ picturesPattern imagens (x:xs) = listaPattern imagens x : picturesPattern imagen
 picturesParede :: [(Cor, Picture)] -> LinhaParede -> [Picture]
 picturesParede _ [] = []
 picturesParede imagens (x:xs) = listaParede imagens x : picturesParede imagens xs
+
+--REGRAS
+jogadaPossivel :: [Cor] -> [Maybe Cor] -> Bool
+jogadaPossivel [] _ = False
+jogadaPossivel _ [] = False
+jogadaPossivel l@(x:xs) l2@(Just y:ys) = (x == y && any isNothing l2) || jogadaPossivel xs l2
+jogadaPossivel _ ys = any isNothing ys
+
+naoHaJogadasPossiveis :: [[Cor]] -> [[Maybe Cor]] -> Bool
+naoHaJogadasPossiveis [] _ = False
+naoHaJogadasPossiveis _ [] = False
+naoHaJogadasPossiveis (x:xs) l2@(y:ys) = any (jogadaPossivel x) l2 || naoHaJogadasPossiveis xs l2
+
+-- >>> jogadaPossivel [Amarelo,Azul,Vermelho,Branco] [Nothing, Nothing, Nothing, Nothing]
+-- True
+
+-- >>> any (jogadaPossivel [Amarelo,Azul,Vermelho]) [[Nothing, Nothing, Nothing],[Just Preto, Nothing, Nothing, Nothing]]
+-- True
+
+
+-- >>> naoHaJogadasPossiveis [[Amarelo,Azul,Vermelho,Branco],[Branco]] [[Nothing, Nothing, Nothing],[Just Branco, Nothing, Nothing, Nothing]]
+-- True
+
+-- haJogadaPossivel :: [[Cor]] -> [[Maybe Cor]] -> Bool
+-- haJogadaPossivel

@@ -115,7 +115,8 @@ compraPraPatternLine compra l i s0@(State2 s e m v c1 c2 pl1 pl2 p1 p2 p inp)
         | x == y    = Just y : preencheLista x1 ys -- Só substitui os próximos valores se o primeiro Just for igual em ambas as listas.
         | otherwise = Just y : ys                  -- Retorna a segunda lista sem alterações se os valores iniciais forem diferentes.
     preencheLista _ ys = ys  -- Para qualquer outro caso, retorna a segunda lista como está.
-    sobra = atualizaChao compra (preencheLista compra (pl2 !! i))
+    sobra | v == 0 = atualizaChao compra (preencheLista compra (pl1 !! i))
+          | otherwise = atualizaChao compra (preencheLista compra (pl2 !! i))
     novoExpo | l == 5 = e
              | otherwise = dropaExpositor e l
     novoCentro | l == 5 = dropaCorDeLsCores cor m
@@ -126,7 +127,7 @@ compraPraPatternLine compra l i s0@(State2 s e m v c1 c2 pl1 pl2 p1 p2 p inp)
     podeJogadaOuReseta (Nothing:_) _ = True
     podeJogadaOuReseta l@(Just x:xs) (Nothing:ys) = True
     podeJogadaOuReseta (Just x:xs) (Just y:ys) = x == y
-    
+
 
 atualizaChao :: [Maybe Cor] -> [Maybe Cor] -> [Chao]
 atualizaChao [] _ = []
@@ -137,17 +138,11 @@ atualizaChao c@(Just _:_) p@(Nothing:_) | length c > length p = fmap quebraAzule
 atualizaChao c@(Just x:xs) p@(Just y:ys) | podeJogar1 && length c > length p = fmap quebraAzulejo (drop (length p - 1) c)
                                          | otherwise = []
   where
-    podeJogar :: Eq a => [Maybe a] -> [Maybe a] -> Bool
-    podeJogar [] _ = True
-    podeJogar _ [] = True
-    podeJogar (Nothing:_) _ = True
-    podeJogar (Just x:xs) (Nothing:ys) = True
-    podeJogar (Just x:xs) (Just y:ys) = x == y || podeJogar xs ys
-    podeJogar1 = podeJogar c p
+    podeJogar1 = podeCompraPraPatternLine c p
 
 quebraUmAzulejo :: State2 -> State2
-quebraUmAzulejo (State2 s e m v c1 c2 pl1 pl2 p1 p2 p inp) | v == 0 = State2 s e (tail m) v (AzulejoQuebrado:c1) c2 pl1 pl2 p1 p2 p inp
-                                                           | otherwise = State2 s e (tail m) v c1 (AzulejoQuebrado:c2) pl1 pl2 p1 p2 p inp
+quebraUmAzulejo (State2 s e m v c1 c2 pl1 pl2 p1 p2 p inp) | v == 0 = State2 s e (tail m) 1 (AzulejoQuebrado:c1) c2 pl1 pl2 p1 p2 p inp
+                                                           | otherwise = State2 s e (tail m) 0 c1 (AzulejoQuebrado:c2) pl1 pl2 p1 p2 p inp
 
 tiraCor :: Maybe Cor -> Cor
 tiraCor (Just c) = c
@@ -155,8 +150,15 @@ tiraCor (Just c) = c
 estadoInicial :: State2
 estadoInicial = State2 (sacoAzulejos []) [] [] 0 [] [] (criarPatternLines 5) [] [] [] (0,0) []
 
--- >>> compraPraPatternLine [Just Amarelo, Just Amarelo, Just Amarelo] 1 estadoInicial
--- State2 {sa1 = [(20,Azul),(20,Amarelo),(20,Vermelho),(20,Preto),(20,Branco)], expositores1 = [], cm1 = [], deQuemEAVez1 = 0, chao1 = [AzulejoQuebrado], chao2 = [], pl1 = [[Nothing],[Just Amarelo,Just Amarelo],[Nothing,Nothing,Nothing],[Nothing,Nothing,Nothing,Nothing],[Nothing,Nothing,Nothing,Nothing,Nothing]], pl2 = [], parede1 = [], parede2 = []}
+podeCompraPraPatternLine :: Eq a => [Maybe a] -> [Maybe a] -> Bool
+podeCompraPraPatternLine [] _ = False
+podeCompraPraPatternLine _ [] = False
+podeCompraPraPatternLine (Nothing:_) _ = False
+podeCompraPraPatternLine _ (Nothing:ys) = True
+podeCompraPraPatternLine (Just x:xs) l2@(Just y:ys) | x /= y = False
+                                     | otherwise = any isNothing ys
+podeCompraPraPatternLine _ _ = False
 
--- >>> criarParede 
--- [[(Azul,False),(Amarelo,False),(Vermelho,False),(Preto,False),(Branco,False)],[(Branco,False),(Azul,False),(Amarelo,False),(Vermelho,False),(Preto,False)],[(Preto,False),(Branco,False),(Azul,False),(Amarelo,False),(Vermelho,False)],[(Vermelho,False),(Preto,False),(Branco,False),(Azul,False),(Amarelo,False)],[(Amarelo,False),(Vermelho,False),(Preto,False),(Branco,False),(Azul,False)]]
+-- >>> podeCompraPraPatternLine [Just Azul] [Just Vermelho,Nothing]
+-- False
+

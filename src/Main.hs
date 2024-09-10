@@ -33,31 +33,16 @@ trataEvento (EventKey (Char c) Down _ _) st@(State2 sa2 expo cm v c1 c2 pl1 pl2 
       where
         nloja = digitToInt str1 - 1
         npl = digitToInt str3 - 1
-        cor 
+        cor
           | str2 == 'a' = Amarelo
           | str2 == 'p' = Preto
           | str2 == 'b' = Branco
           | str2 == 'v' = Vermelho
           | str2 == 'z' = Azul
           | otherwise = error "Cor não identificada"
-        novoEstado | verificaChaoInsta (adicionaLista cm expo) pl1 = quebraUmAzulejo estado
+        novoEstado | not (naoHaJogadasPossiveis (adicionaLista cm expo) pl1) = quebraUmAzulejo estado
                    | nloja == 5 = nextRound (compraPraPatternLine (compraNoContexto $ compraCentroDaMesa cor cm) nloja npl estado)
                    | otherwise = nextRound (compraPraPatternLine (compraNoContexto $ compraExpositor cor nloja expo) nloja npl estado)
-        verificaChaoInsta :: Eq a => [[a]] -> [[Maybe a]] -> Bool --verifica se pode jogar um azulejo no chao do jogador direto, pois não há mais jogadas
-        verificaChaoInsta [] _ = True
-        verificaChaoInsta _ [] = False
-        verificaChaoInsta (xs:xss) yss =
-          case xs of
-          [] -> False  -- Caso a lista de `a` esteja vazia
-          (x:_) -> any (verificaPrimeiro x) yss && verificaChaoInsta xss yss
-            where
-            verificaPrimeiro :: Eq a => a -> [Maybe a] -> Bool
-            verificaPrimeiro _ [] = False
-            verificaPrimeiro _ (Nothing:_) = False
-            verificaPrimeiro x (Just y:_) = x == y
-        
-        adicionaLista :: [a] -> [[a]] -> [[a]]
-        adicionaLista novaLista listaDeListas = novaLista : listaDeListas
       --   novoExpo
       --     | nloja == 5 = expo
       --     | otherwise = dropaExpositor expo nloja
@@ -67,7 +52,7 @@ trataEvento (EventKey (Char c) Down _ _) st@(State2 sa2 expo cm v c1 c2 pl1 pl2 
       --     | otherwise = if v == 0 
       --                   then incrementaCores (restoExpositor (last novoJ12) nloja expo) cm2
       --                   else incrementaCores (restoExpositor (last novoJ22) nloja expo) cm2
-        
+
       --   novaVez = trocaVez v
 
       --  novoC1 = if v == 0 then atualizaChao (restoExpositor (last $ compraExpositor cor nloja expo) nloja expo) c1 else c1
@@ -81,12 +66,12 @@ trataEvento (EventKey (Char c) Down _ _) st@(State2 sa2 expo cm v c1 c2 pl1 pl2 
       --    | v == 0 = incrementaCores j12 (compraExpositor cor nloja expo)
       --    | otherwise = j12 --Se não se encaixa em nenhum caso, mantém o valor antigo
 
-        
+
       --  novoJ22
       --    | nloja == 5 && v == 1 = incrementaCores j22 (compraCentroDaMesa cor cm2)
       --    | v == 1 = incrementaCores j22 (compraExpositor cor nloja expo)
       --    | otherwise = j22 --Se não se encaixa em nenhum caso, mantém o valor antigo
-      
+
 trataEvento _ state = state
 
 trocaVez :: Int -> Int
@@ -134,3 +119,10 @@ carregaImagens = do
 
 carregaAzulejosQuebrados :: IO Picture
 carregaAzulejosQuebrados = loadBMP "src/assets/azulejoquebrado.bmp"
+
+adicionaLista :: [a] -> [[a]] -> [[a]]
+adicionaLista novaLista listaDeListas = novaLista : listaDeListas
+
+
+-- >>> naoHaJogadasPossiveis (geraExpositores (azulejosParaNum (sacoAzulejos []) 0) 20) (criarPatternLines 5)
+-- True
