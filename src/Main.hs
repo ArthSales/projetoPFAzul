@@ -12,11 +12,16 @@ import Graphics.Gloss
 import Graphics.Gloss.Interface.Pure.Game
     ( Key(Char), KeyState(Down), Event(EventKey) )
 import Data.Char (digitToInt)
+import Foreign (new)
+import Control.Arrow (Arrow(first))
 
 
 trataEvento :: Event -> State2 -> State2
 trataEvento (EventKey (Char c) Down _ _) st@(State2 _ expo cm v _ _ pl1 pl2 p1 p2 _ i)
-  | length newInputs == 3 = processarInputs newInputs st { inputs = [] }
+  | length newInputs == 3 = 
+    if safeInput newInputs 
+      then processarInputs newInputs st { inputs = [] }
+      else st { inputs = [] }
   | otherwise = st { inputs = newInputs }
   where
     newInputs = i ++ [c]
@@ -79,8 +84,8 @@ trataEvento _ state = state
 
 -- render  :: Picture -> State1 -> Picture
 -- render img (State1 saco exp1 cm1 v j11 j21) = tabuleiroLojas img exp1 cm1 j11 j21
-render :: [(Cor, Picture)] -> Picture -> Picture -> State2 -> Picture
-render imagens tabuleiros azulejoQuebrado (State2 _ exp1 cm1 vez c1 c2 pt1 pt2 p1 p2 p _) = tabuleiroLojas imagens tabuleiros azulejoQuebrado exp1 cm1 c1 c2 pt1 pt2 p1 p2 p vez
+render :: [(Cor, Picture)] -> Picture -> Picture -> Picture -> State2 -> Picture
+render imagens tabuleiros azulejoQuebrado inst (State2 _ exp1 cm1 vez c1 c2 pt1 pt2 p1 p2 p _) = tabuleiroLojas imagens tabuleiros azulejoQuebrado inst exp1 cm1 c1 c2 pt1 pt2 p1 p2 p vez
 
 update :: Float -> State2 -> State2
 update _ state = state
@@ -95,6 +100,7 @@ main = do
   imagens <- carregaImagens
   tabuleiro <- loadBMP "src/assets/tabuleiro.bmp"
   azulejoQuebrado <- loadBMP "src/assets/azulejoquebrado.bmp"
+  instrucoes <- loadBMP "src/assets/instrucoes.bmp"
 
   let initState = State2 sacoInicial expoInicial [] vez [] [] (criarPatternLines 5) (criarPatternLines 5) criarParede criarParede (0, 0) []
   play
@@ -102,7 +108,7 @@ main = do
     (makeColorI 105 105 105 255)                       -- Cor de fundo
     30                                                 -- Número de frames por segundo
     initState                                      -- Estado inicial
-    (render imagens tabuleiro azulejoQuebrado)                                            -- Função para desenhar o estado
+    (render imagens tabuleiro azulejoQuebrado instrucoes)            -- Função para desenhar o estado
     trataEvento                                        -- Função para lidar com eventos
     update
 
@@ -115,3 +121,58 @@ carregaImagens = do
   vermelho <- loadBMP "src/assets/azulejo_vermelho.bmp"
   preto <- loadBMP "src/assets/azulejo_preto.bmp"
   return [(Amarelo, amarelo), (Azul, azul), (Branco, branco), (Vermelho, vermelho), (Preto, preto)]
+
+
+
+paredeFicticia :: [LinhaParede]
+paredeFicticia = [
+  [(Azul,True),(Amarelo,True),(Vermelho,True),(Preto,True),(Branco,True)],
+  [(Branco,True),(Azul,False),(Amarelo,False),(Vermelho,False),(Preto,False)],
+  [(Preto,True),(Branco,True),(Azul,True),(Amarelo,True),(Vermelho,True)],
+  [(Vermelho,True),(Preto,False),(Branco,False),(Azul,False),(Amarelo,False)],
+  [(Amarelo,True),(Vermelho,False),(Preto,False),(Branco,False),(Azul,False)]
+  ]
+
+pontuacaoLinha :: [LinhaParede] -> Int
+pontuacaoLinha [] = 0
+pontuacaoLinha (x:xs) = acc + pontuacaoLinha xs
+  where
+    verificaLinha :: LinhaParede -> Bool
+    verificaLinha [] = True
+    verificaLinha ((_,b):ys) = b && verificaLinha ys
+    acc
+      |verificaLinha x = 1
+      |otherwise = 0
+
+pontuacaoColuna1 :: Int -> [LinhaParede] -> Bool
+pontuacaoColuna1 _ [] = True
+pontuacaoColuna1 i (x:xs) = verificaColuna && pontuacaoColuna1 i xs
+  where
+  verificaColuna = snd $ (!!) x i
+
+pontuacaoColuna :: Int -> [LinhaParede] -> Int
+pontuacaoColuna 0 xs = if pontuacaoColuna1 0 xs then 1 else 0
+pontuacaoColuna i xs = acc + pontuacaoColuna (i-1) xs
+  where
+    acc
+      |pontuacaoColuna1 i xs = 1
+      |otherwise = 0
+    
+pontuacaoLinhasColunas :: [LinhaParede] -> [LinhaParede] -> (Pontuacao, Pontuacao)
+pontuacaoLinhasColunas paredeJ1 paredeJ2 = (pontuacao1, pontuacao2)
+  where
+    pontuacao1 = pontuacaoLinha paredeJ1 + pontuacaoColuna 4 paredeJ1
+    pontuacao2 = pontuacaoLinha paredeJ2 + pontuacaoColuna 4 paredeJ2
+
+-- >>> pontuacaoLinhasColunas paredeFicticia paredeFicticia
+-- (3,3)
+
+safeInput :: String -> Bool
+safeInput input = firstInput && secondInput && thirdInput
+  where 
+    firstInput = (!!) input 0 `elem` "123456"
+    secondInput = (!!) input 1 `elem` "avbpz"
+    thirdInput = (!!) input 2 `elem` "12345"
+
+-- >>> safeInput "1z5"
+-- True

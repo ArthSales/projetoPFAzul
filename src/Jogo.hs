@@ -5,6 +5,9 @@ import Data.Maybe (isNothing)
 loja :: Picture
 loja = color (makeColorI 110 53 7 255) (circleSolid 80)
 
+lojaC :: Picture
+lojaC = color (makeColorI 228 221 207 255) (circleSolid 70)
+
 centro :: Picture
 centro = circle 125
 
@@ -38,7 +41,7 @@ posicoesTextos :: [(Float, Float)]
 posicoesTextos = [(-320, 270), (-140, 135), (-90, -100), (-470, -100), (-540, 135), (-280,60), --numeros das lojas
                   (100, 325), (100, -25), --jogadores
                   (380,325), (380,-25), --pontuação
-                  (-600,330)] --vez
+                  (-600,350)] --vez
 
 posicaoAzulejoInicial :: [(Float, Float)]
 posicaoAzulejoInicial = [(-295,215),(-240,215),(-295,165),(-240,165)]
@@ -95,8 +98,8 @@ chaoImagem :: Picture -> [Chao] -> [Picture]
 chaoImagem _ [] = []
 chaoImagem img (_:xs) = img : chaoImagem img xs
 
-tabuleiroLojas :: [(Cor, Picture)] -> Picture -> Picture -> [[Cor]] -> [Cor] -> [Chao] -> [Chao] -> [[Maybe Cor]] -> [[Maybe Cor]] -> [LinhaParede] -> [LinhaParede] -> (Int, Int) -> Int -> Picture
-tabuleiroLojas tuplas tabuleiros azulejoQuebradoImg expo cent ch1 ch2 pt1 pt2 p1 p2 (pont1, pont2) vez=
+tabuleiroLojas :: [(Cor, Picture)] -> Picture -> Picture -> Picture -> [[Cor]] -> [Cor] -> [Chao] -> [Chao] -> [[Maybe Cor]] -> [[Maybe Cor]] -> [LinhaParede] -> [LinhaParede] -> (Int, Int) -> Int -> Picture
+tabuleiroLojas tuplas tabuleiros azulejoQuebradoImg inst expo cent ch1 ch2 pt1 pt2 p1 p2 (pont1, pont2) vez=
   let azulejosExpo = map (map (obtemImagem tuplas)) expo
       azulejosCent = map (obtemImagem tuplas) cent
       azulejosPl1 =  concatMap (picturesPattern tuplas) pt1
@@ -111,9 +114,11 @@ tabuleiroLojas tuplas tabuleiros azulejoQuebradoImg expo cent ch1 ch2 pt1 pt2 p1
       textosCompl = textos ++ [textoPont ++ show pont1] ++ [textoPont ++ show pont2] ++ [textoVez]
       textosTraduzidos = [translate x y (scale 0.2 0.2 (text num)) | ((x , y) , num) <- zip posicoesTextos textosCompl]
       lojasTraduzidas = [translate x y loja | (x, y) <- posicoesLojas]
+      lojasCTraduzidas = [translate x y lojaC | (x, y) <- posicoesLojas]
       centroTraduzido = translate (-270) (-30) centro
       tabuleiro1 = translate 319 200 (scale 0.4 0.4 tabuleiros)
       tabuleiro2 = translate 319 (-150) (scale 0.4 0.4 tabuleiros)
+      instrucoes = translate (-500) 250 (scale 0.5 0.5 inst)
       azulejosTraduzidosExpo = [translate x y azulejo | (x, y, azulejo) <- juntaPosicoesCores posicoesAzulejos azulejosExpo]
       azulejosTraduzidosCent = [translate x y azulejo | ((x, y), azulejo) <- zip posicoesAzulejosCentro azulejosCent]
       azulejosTraduzidosPt1 = [translate x y azulejo | ((x, y), azulejo) <- zip posicoesAzulejosPT1 azulejosPl1]
@@ -123,9 +128,9 @@ tabuleiroLojas tuplas tabuleiros azulejoQuebradoImg expo cent ch1 ch2 pt1 pt2 p1
       azulejosTraduzidosC1 = [translate x y (scale 0.08 0.08 azulejo) | ((x, y), azulejo) <- zip posicoesChao1 chao1Img]
       azulejosTraduzidosC2 = [translate x y (scale 0.08 0.08 azulejo) | ((x, y), azulejo) <- zip posicoesChao2 chao2Img]
 
-   in pictures (textosTraduzidos ++ lojasTraduzidas ++ [centroTraduzido] ++ azulejosTraduzidosExpo ++
+   in pictures (textosTraduzidos ++ lojasTraduzidas ++ lojasCTraduzidas ++ [centroTraduzido] ++ azulejosTraduzidosExpo ++
                 azulejosTraduzidosCent ++ [tabuleiro1] ++ [tabuleiro2] ++ azulejosTraduzidosPt1 ++
-                azulejosTraduzidosPt2 ++ azulejosTraduzidosP1 ++ azulejosTraduzidosP2 ++
+                azulejosTraduzidosPt2 ++ azulejosTraduzidosP1 ++ azulejosTraduzidosP2 ++ [instrucoes] ++
                 azulejosTraduzidosC1 ++  azulejosTraduzidosC2)
 
 listaParede :: [(Cor,Picture)] -> (Cor,Bool) -> Picture
