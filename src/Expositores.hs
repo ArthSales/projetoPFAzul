@@ -77,7 +77,6 @@ compraExpositor c i es | i > (length es - 1) || null filtrada = [Azul,Azul,Azul,
 colocaCompraNoMaybe :: [Cor] -> [Maybe Cor]
 colocaCompraNoMaybe = foldr ((:) . Just) []
 
-
 dropaCorDeLsCores :: Cor -> [Cor] -> [Cor]
 dropaCorDeLsCores _ [] = []
 dropaCorDeLsCores c (cor:cs) | corBate c cor = dropaCorDeLsCores c cs
@@ -86,16 +85,12 @@ dropaCorDeLsCores c (cor:cs) | corBate c cor = dropaCorDeLsCores c cs
     corBate :: Cor -> Cor -> Bool
     corBate cs1 cexp = cs1 == cexp
 
-
 compraCentroDaMesa :: Cor -> [Cor] -> [Cor]
 compraCentroDaMesa c es = filtrada
   where
     corBate :: Cor -> Cor -> Bool
     corBate cs cexp = cs == cexp
     filtrada = filter (corBate c) es
-
--- >>> compraCentroDaMesa Amarelo [Amarelo, Amarelo, Azul, Vermelho]
--- [Amarelo,Amarelo]
 
 -- Função que manda o resto pro centro da mesa
 restoExpositor :: Cor -> Int -> [[Cor]] -> [Cor]
@@ -104,20 +99,17 @@ restoExpositor c i es = filter (corBate c) (head (drop i es))
     corBate :: Cor -> Cor -> Bool
     corBate cs cexp = cs /= cexp
 
+-- Coloca uma lista de cor no Contexto
 compraNoContexto :: [Cor] -> [Maybe Cor]
 compraNoContexto = fmap Just
 
--- >>>compraNoContexto [Amarelo, Branco]
--- [Just Amarelo,Just Branco]
-
-estadoInicial :: State2
-estadoInicial = State2 (sacoAzulejos []) [] [] 0 [AzulejoQuebrado,AzulejoQuebrado,Vazio] [] [] [] [[(Amarelo, False),(Azul, True)]] [] (0,0) []
-
+-- Função auxiliar pra pontuação, que contabiliza quantos trues tem numa lista de tuplas da parede
 contaTruesParede :: LinhaParede -> Int
 contaTruesParede [] = 0
 contaTruesParede ((_,b):as) | not b = contaTruesParede as
                             | otherwise = 1 + contaTruesParede as
 
+-- Função que atualiza a pontuação, com a contaTruesParede e tira pontos por azulejos quebrados
 attPontuacao :: State2 ->  State2
 attPontuacao s0@(State2 s e m v c1 c2 pl1 pl2 p1 p2 (po1,po2) i) =
   State2 { sa = s, expositores = e, cm = m, deQuemEAVez = v, chao1 = c1, chao2 = c2, pl1 = pl1, pl2 = pl2, parede1 = p1, parede2 = p2, pontuacoes = (pn1,pn2), inputs = i}
@@ -125,6 +117,7 @@ attPontuacao s0@(State2 s e m v c1 c2 pl1 pl2 p1 p2 (po1,po2) i) =
       pn1 = po1 + sum (fmap contaTruesParede p1) - length c1
       pn2 = po2 + sum (fmap contaTruesParede p2) - length c2
 
+--Junta duas listas de cores
 incrementaCores :: [Cor] -> [Cor] -> [Cor]
 incrementaCores cs [] = cs
 incrementaCores [] cm = cm

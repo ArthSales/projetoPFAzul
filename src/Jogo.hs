@@ -168,21 +168,25 @@ picturesParede imagens (x:xs) = listaParede imagens x : picturesParede imagens x
 
 --REGRAS DE FUNCIONAMENTO DO JOGO
 
+-- Verifica se a jogada escolhida é possível
 jogadaPossivel :: [Cor] -> [Maybe Cor] -> Bool
 jogadaPossivel [] _ = False
 jogadaPossivel _ [] = False
 jogadaPossivel l@(x:xs) l2@(Just y:ys) = (x == y && any isNothing l2) || jogadaPossivel xs l2
 jogadaPossivel _ ys = any isNothing ys
 
+-- Verifica se o jogador da vez ainda tem alguma jogada possível
 naoHaJogadasPossiveis :: [[Cor]] -> [[Maybe Cor]] -> Bool
 naoHaJogadasPossiveis [] _  = False
 naoHaJogadasPossiveis _ [] = False
 naoHaJogadasPossiveis (x:xs) l2@(y:ys) = any (jogadaPossivel x) l2 || naoHaJogadasPossiveis xs l2
 
+-- Adiciona uma lista dentro de uma lista de listas
 adicionaLista :: [a] -> [[a]] -> [[a]]
 adicionaLista novaLista listaDeListas = novaLista : listaDeListas
 
+-- Verifica se a parede já tem os azulejos 
 jogadaPossivelParede :: Cor -> [(Cor,Bool)] -> Bool
-jogadaPossivelParede x [] = False
+jogadaPossivelParede _ [] = False
 jogadaPossivelParede x ((c,b):cs) | x == c && not b = True
                                   | otherwise = jogadaPossivelParede x cs

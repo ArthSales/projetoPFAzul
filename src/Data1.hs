@@ -10,20 +10,6 @@ type AzulejosSeparados = (Int,Cor) --Separa azulejo pra que tenha valor numéric
 type LinhaParede = [(Cor, Bool)]
 type Pontuacao = Int
 
--- Define o estado do jogo
-
-
--- data State1 = State1 {
---   sa :: Azulejos
---   ,expositores :: [[Cor]]
---   ,cm :: [Cor]
---   ,deQuemEAVez :: Int
---   ,j1 :: [Cor]
---   ,j2 :: [Cor]
---   ,inputs :: [Char]
---  -- , imagens :: [(Cor, Picture)]
--- } deriving Show
-
 data State2 = State2 {
   sa :: Azulejos
   ,expositores :: [[Cor]]
@@ -37,6 +23,5 @@ data State2 = State2 {
   ,parede2 :: [LinhaParede]
   ,pontuacoes :: (Pontuacao,Pontuacao)
   ,inputs :: [Char]
- -- ,picture :: Picture
-} deriving Show
+ } deriving Show
 
