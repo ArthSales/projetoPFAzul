@@ -12,12 +12,9 @@ import Graphics.Gloss
 import Graphics.Gloss.Interface.Pure.Game
     ( Key(Char), KeyState(Down), Event(EventKey) )
 import Data.Char (digitToInt)
-<<<<<<< HEAD
 import Foreign (new)
 import Control.Arrow (Arrow(first))
-=======
 import Control.Monad.State
->>>>>>> fe2ed2de9c17512dbb3a93be1eb110a61fec51f6
 
 
 trataEvento :: Event -> State2 -> State2
@@ -47,10 +44,10 @@ trataEvento (EventKey (Char c) Down _ _) st@(State2 _ expo cm v _ _ pl1 pl2 p1 p
           | str2 == 'v' = Vermelho
           | str2 == 'z' = Azul
           | otherwise = error "Cor não identificada"
-        novoEstado | v == 0 && not (naoHaJogadasPossiveis (adicionaLista cm expo) pl1) = execState nextRound (quebraUmAzulejo estado)
-                   | v == 1 && not (naoHaJogadasPossiveis (adicionaLista cm expo) pl2) = execState nextRound (quebraUmAzulejo estado)
-                   | nloja == 5 = execState gameOver (execState nextRound (compraPraPatternLine (compraNoContexto $ compraCentroDaMesa cor cm) nloja npl estado))
-                   | otherwise = execState gameOver (execState nextRound (compraPraPatternLine (compraNoContexto $ compraExpositor cor nloja expo) nloja npl estado))
+        novoEstado | v == 0 && not (naoHaJogadasPossiveis (adicionaLista cm expo) pl1) = attPontuacao (execState nextRound (quebraUmAzulejo estado))
+                   | v == 1 && not (naoHaJogadasPossiveis (adicionaLista cm expo) pl2) = attPontuacao (execState nextRound (attPontuacao (quebraUmAzulejo estado)))
+                   | nloja == 5 = attPontuacao (execState gameOver (execState nextRound (compraPraPatternLine (compraNoContexto $ compraCentroDaMesa cor cm) nloja npl estado)))
+                   | otherwise = attPontuacao (execState gameOver (execState nextRound (attPontuacao (compraPraPatternLine (compraNoContexto $ compraExpositor cor nloja expo) nloja npl estado))))
       --   novoExpo
       --     | nloja == 5 = expo
       --     | otherwise = dropaExpositor expo nloja

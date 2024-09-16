@@ -41,7 +41,7 @@ posicoesTextos :: [(Float, Float)]
 posicoesTextos = [(-320, 270), (-140, 135), (-90, -100), (-470, -100), (-540, 135), (-280,60), --numeros das lojas
                   (100, 325), (100, -25), --jogadores
                   (380,325), (380,-25), --pontuação
-                  (-600,350)] --vez
+                  (-600,340)] --vez
 
 posicaoAzulejoInicial :: [(Float, Float)]
 posicaoAzulejoInicial = [(-295,215),(-240,215),(-295,165),(-240,165)]
@@ -112,7 +112,7 @@ tabuleiroLojas tuplas tabuleiros azulejoQuebradoImg inst expo cent ch1 ch2 pt1 p
       textoVez = "Vez: Jogador " ++ show  (vez+1)
       textoPont = "Pontuacao: "
       textosCompl = textos ++ [textoPont ++ show pont1] ++ [textoPont ++ show pont2] ++ [textoVez]
-      textosTraduzidos = [translate x y (scale 0.2 0.2 (text num)) | ((x , y) , num) <- zip posicoesTextos textosCompl]
+      textosTraduzidos = [translate x y (scale 0.18 0.18 (text num)) | ((x , y) , num) <- zip posicoesTextos textosCompl]
       lojasTraduzidas = [translate x y loja | (x, y) <- posicoesLojas]
       lojasCTraduzidas = [translate x y lojaC | (x, y) <- posicoesLojas]
       centroTraduzido = translate (-270) (-30) centro
